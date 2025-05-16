@@ -2,11 +2,11 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Pedido de Pizza</title>
+  <title>Pizza Grande 4 Sabores</title>
   <style>
     body { font-family: Arial, sans-serif; background: #fff8f5; padding: 20px; }
     .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px #ccc; }
-    h3 { margin-top: 0; }
+    h2, h3 { margin-top: 0; }
     label { display: block; margin: 5px 0; }
     input[type="checkbox"], input[type="radio"] { margin-right: 5px; }
     button { background: #25d366; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
@@ -14,17 +14,12 @@
 </head>
 <body>
 
+<h2>🍕 Pizza Grande - 4 Sabores (R$60,00)</h2>
+
 <form onsubmit="enviarPedido(); return false;">
-  <div class="section">
-    <h3>🍕 Tamanho da Pizza</h3>
-    <label><input type="radio" name="tamanho" value="Pizza Grande 4 Sabores - R$60" required> Pizza Grande 4 Sabores — R$60,00</label>
-    <label><input type="radio" name="tamanho" value="Pizza Grande 2 Sabores - R$50"> Pizza Grande 2 Sabores — R$50,00</label>
-    <label><input type="radio" name="tamanho" value="Pizza Média - R$45"> Pizza Média — R$45,00</label>
-    <label><input type="radio" name="tamanho" value="Pizza Pequena - R$30"> Pizza Pequena — R$30,00</label>
-  </div>
 
   <div class="section">
-    <h3>🧀 Borda Família (1 opção)</h3>
+    <h3>🧀 Borda Família (+R$10,00)</h3>
     <label><input type="radio" name="borda" value="Cream Cheese"> Cream Cheese</label>
     <label><input type="radio" name="borda" value="Catupiry"> Catupiry</label>
     <label><input type="radio" name="borda" value="Cheddar"> Cheddar</label>
@@ -36,7 +31,7 @@
   </div>
 
   <div class="section">
-    <h3>🧂 Adicionais (até 3)</h3>
+    <h3>🧂 Adicionais (até 3, R$1,00 cada)</h3>
     <label><input type="checkbox" name="adicional" value="Azeite"> Azeite</label>
     <label><input type="checkbox" name="adicional" value="Bacon"> Bacon</label>
     <label><input type="checkbox" name="adicional" value="Batata Palha"> Batata Palha</label>
@@ -49,14 +44,8 @@
   </div>
 
   <div class="section">
-    <h3>🔪 Corte da Pizza</h3>
-    <label><input type="radio" name="corte" value="Fatia" required> FATIA: Pizza cortada em fatias</label>
-    <label><input type="radio" name="corte" value="Palito"> PALITO: Pizza cortada em cubinhos</label>
-  </div>
-
-  <div class="section">
     <h3>🍕 Sabores (mínimo 1 - máximo 4)</h3>
-    <label><input type="checkbox" name="sabor" value="MODA DO CHEFE"> (NOVIDADE) MODA DO CHEFE</label>
+    <label><input type="checkbox" name="sabor" value="MODA DO CHEFE"> MODA DO CHEFE</label>
     <label><input type="checkbox" name="sabor" value="BAURU"> BAURU</label>
     <label><input type="checkbox" name="sabor" value="BACON"> BACON</label>
     <label><input type="checkbox" name="sabor" value="BACON ESPECIAL"> BACON ESPECIAL</label>
@@ -67,39 +56,42 @@
     <input type="text" id="nome" placeholder="Seu nome" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
     <button type="submit">Enviar Pedido no WhatsApp</button>
   </div>
+
 </form>
 
 <script>
 function enviarPedido() {
-  const nome = document.getElementById("nome").value;
-  const tamanho = document.querySelector('input[name="tamanho"]:checked')?.value || "";
+  const nome = document.getElementById("nome").value.trim();
+  const precoBase = 60;
+
   const bordaEl = document.querySelector('input[name="borda"]:checked');
   const borda = bordaEl?.value || "Nenhuma";
-  const bordaPreco = borda && borda !== "Nenhuma" ? 10 : 0;
+  const precoBorda = borda && borda !== "" ? 10 : 0;
 
   const adicionaisSelecionados = [...document.querySelectorAll('input[name="adicional"]:checked')];
+  if (adicionaisSelecionados.length > 3) {
+    alert("Você pode selecionar no máximo 3 adicionais.");
+    return;
+  }
   const adicionais = adicionaisSelecionados.map(a => a.value).join(", ");
-  const adicionaisPreco = adicionaisSelecionados.length * 1;
+  const precoAdicionais = adicionaisSelecionados.length;
 
-  const corte = document.querySelector('input[name="corte"]:checked')?.value || "";
   const saboresSelecionados = [...document.querySelectorAll('input[name="sabor"]:checked')];
-  
   if (saboresSelecionados.length < 1 || saboresSelecionados.length > 4) {
     alert("Selecione de 1 a 4 sabores.");
     return;
   }
-
   const sabores = saboresSelecionados.map(s => s.value).join(", ");
-  const totalExtras = bordaPreco + adicionaisPreco;
+
+  const total = precoBase + precoBorda + precoAdicionais;
 
   const msg = 
 `Pedido de ${nome}:
-🍕 ${tamanho}
-🧀 Borda: ${borda} (R$${bordaPreco})
-🧂 Adicionais: ${adicionais} (R$${adicionaisPreco})
-🔪 Corte: ${corte}
+🍕 Pizza Grande 4 Sabores — R$60,00
+🧀 Borda: ${borda || "Nenhuma"} (R$${precoBorda})
+🧂 Adicionais: ${adicionais || "Nenhum"} (R$${precoAdicionais})
 🍕 Sabores: ${sabores}
-💰 Total de adicionais: R$${totalExtras},00`;
+💰 Total: R$${total},00`;
 
   const tel = "5566996455672";
   const link = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
