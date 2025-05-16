@@ -1,0 +1,16 @@
+<div style="max-width:400px;margin:auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 0 10px #ccc;">
+  <h3>Faça seu pedido</h3>
+  <input id="nome" type="text" placeholder="Seu nome" style="width:100%;padding:10px;margin:5px 0;">
+  <input id="pedido" type="text" placeholder="Seu pedido" style="width:100%;padding:10px;margin:5px 0;">
+  <a id="btn" href="#" target="_blank" style="display:block;text-align:center;background:#25d366;color:#fff;padding:10px;margin-top:10px;border-radius:6px;text-decoration:none;">Enviar no WhatsApp</a>
+</div>
+
+<script>
+  document.getElementById("btn").onclick = function() {
+    const nome = document.getElementById("nome").value;
+    const pedido = document.getElementById("pedido").value;
+    const tel = "5566996455672";
+    const msg = `Olá, meu nome é ${nome}. Quero pedir: ${pedido}`;
+    this.href = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+  };
+</script>
