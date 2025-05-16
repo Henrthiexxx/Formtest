@@ -8,8 +8,9 @@
     .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px #ccc; }
     h2, h3 { margin-top: 0; }
     label { display: block; margin: 5px 0; }
-    input[type="checkbox"], input[type="radio"] { margin-right: 5px; }
+    input[type="checkbox"], input[type="radio"], select { margin-right: 5px; }
     button { background: #25d366; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    select { width: 100%; padding: 10px; border-radius: 6px; margin-top: 10px; }
   </style>
 </head>
 <body>
@@ -53,6 +54,36 @@
   </div>
 
   <div class="section">
+    <h3>📍 Entrega</h3>
+    <select id="entrega" required>
+      <option value="Retirada no Local|0">Retirada no Local — R$0,00</option>
+      <option value="Chico Simão|5">Chico Simão — R$5,00</option>
+      <option value="Jardim Natureza|5">Jardim Natureza — R$5,00</option>
+      <option value="São Marcos I e II|5">São Marcos I e II — R$5,00</option>
+      <option value="Cidade Viva|5">Cidade Viva — R$5,00</option>
+      <option value="Vila Canaã|5">Vila Canaã — R$5,00</option>
+      <option value="Copa X|6">Copa X — R$6,00</option>
+      <option value="Vila Goiás|5">Vila Goiás — R$5,00</option>
+      <option value="Vila Albertina|5">Vila Albertina — R$5,00</option>
+      <option value="Cohab|5">Cohab — R$5,00</option>
+      <option value="Vila São Marcos|5">Vila São Marcos — R$5,00</option>
+      <option value="Altos de Pedra|6">Altos de Pedra — R$6,00</option>
+      <option value="Monte Orebe|5">Monte Orebe — R$5,00</option>
+      <option value="Três Irmãos|5">Três Irmãos — R$5,00</option>
+      <option value="Jardim Morumbi II|5">Jardim Morumbi II — R$5,00</option>
+      <option value="Jardim Mato Grosso|6">Jardim Mato Grosso — R$6,00</option>
+      <option value="Colina Verde|6">Colina Verde — R$6,00</option>
+      <option value="Jardim Urupes|5">Jardim Urupes — R$5,00</option>
+      <option value="São Sebastião|5">São Sebastião — R$5,00</option>
+      <option value="Jardim Morumbi|5">Jardim Morumbi — R$5,00</option>
+      <option value="Vila São Paulo|5">Vila São Paulo — R$5,00</option>
+      <option value="São Pedro|5">São Pedro — R$5,00</option>
+      <option value="Centro|5">Centro — R$5,00</option>
+      <option value="Comunidade São José|5">Comunidade São José — R$5,00</option>
+    </select>
+  </div>
+
+  <div class="section">
     <input type="text" id="nome" placeholder="Seu nome" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
     <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
     <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
@@ -65,20 +96,18 @@ function enviarPedido() {
   const nome = document.getElementById("nome").value.trim();
   const ddd = document.getElementById("ddd").value.trim();
   const celular = document.getElementById("celular").value.trim();
-
   if (!/^\d{2}$/.test(ddd) || !/^\d{9}$/.test(celular)) {
-    alert("Telefone inválido. DDD com 2 dígitos e número com 9 dígitos.");
+    alert("Telefone inválido.");
     return;
   }
 
   const precoBase = 60;
-  const bordaEl = document.querySelector('input[name="borda"]:checked');
-  const borda = bordaEl?.value || "Nenhuma";
+  const borda = document.querySelector('input[name="borda"]:checked')?.value || "Nenhuma";
   const precoBorda = borda && borda !== "" ? 10 : 0;
 
   const adicionaisSelecionados = [...document.querySelectorAll('input[name="adicional"]:checked')];
   if (adicionaisSelecionados.length > 3) {
-    alert("Você pode selecionar no máximo 3 adicionais.");
+    alert("Máximo de 3 adicionais.");
     return;
   }
   const adicionais = adicionaisSelecionados.map(a => a.value).join(", ");
@@ -86,46 +115,50 @@ function enviarPedido() {
 
   const saboresSelecionados = [...document.querySelectorAll('input[name="sabor"]:checked')];
   if (saboresSelecionados.length < 1 || saboresSelecionados.length > 4) {
-    alert("Selecione de 1 a 4 sabores.");
+    alert("Escolha de 1 a 4 sabores.");
     return;
   }
   const sabores = saboresSelecionados.map(s => s.value).join(", ");
 
-  const total = precoBase + precoBorda + precoAdicionais;
+  const entregaRaw = document.getElementById("entrega").value.split("|");
+  const bairro = entregaRaw[0];
+  const precoEntrega = parseFloat(entregaRaw[1]);
+
+  const total = precoBase + precoBorda + precoAdicionais + precoEntrega;
   const linkContato = `https://wa.me/55${ddd}${celular}`;
 
   const msg = 
 `Pedido de ${nome}:
 🍕 Pizza Grande 4 Sabores — R$60,00
-🧀 Borda: ${borda || "Nenhuma"} (R$${precoBorda})
+🧀 Borda: ${borda} (R$${precoBorda})
 🧂 Adicionais: ${adicionais || "Nenhum"} (R$${precoAdicionais})
 🍕 Sabores: ${sabores}
+🚚 Entrega: ${bairro} (R$${precoEntrega})
 💰 Total: R$${total},00
-📞 Contato do cliente: ${linkContato}`;
+📞 Contato: ${linkContato}`;
 
   const tel = "5566996455672";
   const link = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
   window.open(link, "_blank");
 }
 
-// Limita adicionais (máx 3)
+// Limites ao marcar
 document.querySelectorAll('input[name="adicional"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const selecionados = document.querySelectorAll('input[name="adicional"]:checked');
     if (selecionados.length > 3) {
       cb.checked = false;
-      alert("Máximo de 3 adicionais permitidos.");
+      alert("Máximo de 3 adicionais.");
     }
   });
 });
 
-// Limita sabores (máx 4)
 document.querySelectorAll('input[name="sabor"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const selecionados = document.querySelectorAll('input[name="sabor"]:checked');
     if (selecionados.length > 4) {
       cb.checked = false;
-      alert("Máximo de 4 sabores permitidos.");
+      alert("Máximo de 4 sabores.");
     }
   });
 });
