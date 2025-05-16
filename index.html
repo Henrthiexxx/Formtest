@@ -17,7 +17,7 @@
 <form onsubmit="enviarPedido(); return false;">
   <div class="section">
     <h3>🍕 Tamanho da Pizza</h3>
-    <label><input type="radio" name="tamanho" value="Pizza Grande 4 Sabores - R$60"> Pizza Grande 4 Sabores — R$60,00</label>
+    <label><input type="radio" name="tamanho" value="Pizza Grande 4 Sabores - R$60" required> Pizza Grande 4 Sabores — R$60,00</label>
     <label><input type="radio" name="tamanho" value="Pizza Grande 2 Sabores - R$50"> Pizza Grande 2 Sabores — R$50,00</label>
     <label><input type="radio" name="tamanho" value="Pizza Média - R$45"> Pizza Média — R$45,00</label>
     <label><input type="radio" name="tamanho" value="Pizza Pequena - R$30"> Pizza Pequena — R$30,00</label>
@@ -32,7 +32,7 @@
     <label><input type="radio" name="borda" value="Chocolate Branco"> Chocolate Branco</label>
     <label><input type="radio" name="borda" value="Frango"> Frango</label>
     <label><input type="radio" name="borda" value="Mussarela"> Mussarela</label>
-    <label><input type="radio" name="borda" value="Nenhuma" checked> Nenhuma</label>
+    <label><input type="radio" name="borda" value="" checked> Nenhuma</label>
   </div>
 
   <div class="section">
@@ -50,17 +50,17 @@
 
   <div class="section">
     <h3>🔪 Corte da Pizza</h3>
-    <label><input type="radio" name="corte" value="Fatia"> FATIA: Pizza cortada em fatias</label>
+    <label><input type="radio" name="corte" value="Fatia" required> FATIA: Pizza cortada em fatias</label>
     <label><input type="radio" name="corte" value="Palito"> PALITO: Pizza cortada em cubinhos</label>
   </div>
 
   <div class="section">
-    <h3>🍕 Sabores (mínimo 1)</h3>
-    <label><input type="checkbox" name="sabor" value="MODA DO CHEFE"> (NOVIDADE) MODA DO CHEFE: Calabresa, Bacon, Catupiry, Mussarela, Tomate, Molho e Orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BAURU"> BAURU: Presunto e Mussarela + tomate, palmito, azeitona e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BACON"> BACON: Mussarela, Bacon, Milho, Cebola e Orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BACON ESPECIAL"> BACON ESPECIAL: Mussarela, Bacon, requeijão, cebola, presunto, orégano.</label>
-    <label><input type="checkbox" name="sabor" value="TESTE"> TESTE: Mussarela.</label>
+    <h3>🍕 Sabores (mínimo 1 - máximo 4)</h3>
+    <label><input type="checkbox" name="sabor" value="MODA DO CHEFE"> (NOVIDADE) MODA DO CHEFE</label>
+    <label><input type="checkbox" name="sabor" value="BAURU"> BAURU</label>
+    <label><input type="checkbox" name="sabor" value="BACON"> BACON</label>
+    <label><input type="checkbox" name="sabor" value="BACON ESPECIAL"> BACON ESPECIAL</label>
+    <label><input type="checkbox" name="sabor" value="TESTE"> TESTE: Mussarela</label>
   </div>
 
   <div class="section">
@@ -73,13 +73,34 @@
 function enviarPedido() {
   const nome = document.getElementById("nome").value;
   const tamanho = document.querySelector('input[name="tamanho"]:checked')?.value || "";
-  const borda = document.querySelector('input[name="borda"]:checked')?.value || "";
+  const bordaEl = document.querySelector('input[name="borda"]:checked');
+  const borda = bordaEl?.value || "Nenhuma";
+  const bordaPreco = borda && borda !== "Nenhuma" ? 10 : 0;
+
+  const adicionaisSelecionados = [...document.querySelectorAll('input[name="adicional"]:checked')];
+  const adicionais = adicionaisSelecionados.map(a => a.value).join(", ");
+  const adicionaisPreco = adicionaisSelecionados.length * 1;
+
   const corte = document.querySelector('input[name="corte"]:checked')?.value || "";
+  const saboresSelecionados = [...document.querySelectorAll('input[name="sabor"]:checked')];
+  
+  if (saboresSelecionados.length < 1 || saboresSelecionados.length > 4) {
+    alert("Selecione de 1 a 4 sabores.");
+    return;
+  }
 
-  const adicionais = [...document.querySelectorAll('input[name="adicional"]:checked')].map(a => a.value).join(", ");
-  const sabores = [...document.querySelectorAll('input[name="sabor"]:checked')].map(s => s.value).join(", ");
+  const sabores = saboresSelecionados.map(s => s.value).join(", ");
+  const totalExtras = bordaPreco + adicionaisPreco;
 
-  const msg = `Pedido de ${nome}:\n🍕 ${tamanho}\n🧀 Borda: ${borda}\n🧂 Adicionais: ${adicionais}\n🔪 Corte: ${corte}\n🍕 Sabores: ${sabores}`;
+  const msg = 
+`Pedido de ${nome}:
+🍕 ${tamanho}
+🧀 Borda: ${borda} (R$${bordaPreco})
+🧂 Adicionais: ${adicionais} (R$${adicionaisPreco})
+🔪 Corte: ${corte}
+🍕 Sabores: ${sabores}
+💰 Total de adicionais: R$${totalExtras},00`;
+
   const tel = "5566996455672";
   const link = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
   window.open(link, "_blank");
