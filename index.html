@@ -98,6 +98,29 @@ function enviarPedido() {
   window.open(link, "_blank");
 }
 </script>
+<script>
+// Limitar adicionais
+document.querySelectorAll('input[name="adicional"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const selecionados = document.querySelectorAll('input[name="adicional"]:checked');
+    if (selecionados.length > 3) {
+      cb.checked = false;
+      alert("Máximo de 3 adicionais permitidos.");
+    }
+  });
+});
+
+// Limitar sabores
+document.querySelectorAll('input[name="sabor"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const selecionados = document.querySelectorAll('input[name="sabor"]:checked');
+    if (selecionados.length > 4) {
+      cb.checked = false;
+      alert("Máximo de 4 sabores permitidos.");
+    }
+  });
+});
+</script>
 
 </body>
 </html>
