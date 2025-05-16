@@ -1,16 +1,90 @@
-<div style="max-width:400px;margin:auto;padding:20px;background:#fff;border-radius:10px;box-shadow:0 0 10px #ccc;">
-  <h3>Faça seu pedido</h3>
-  <input id="nome" type="text" placeholder="Seu nome" style="width:100%;padding:10px;margin:5px 0;">
-  <input id="pedido" type="text" placeholder="Seu pedido" style="width:100%;padding:10px;margin:5px 0;">
-  <a id="btn" href="#" target="_blank" style="display:block;text-align:center;background:#25d366;color:#fff;padding:10px;margin-top:10px;border-radius:6px;text-decoration:none;">Enviar no WhatsApp</a>
-</div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pedido de Pizza</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #fff8f5; padding: 20px; }
+    .section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 0 5px #ccc; }
+    h3 { margin-top: 0; }
+    label { display: block; margin: 5px 0; }
+    input[type="checkbox"], input[type="radio"] { margin-right: 5px; }
+    button { background: #25d366; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<form onsubmit="enviarPedido(); return false;">
+  <div class="section">
+    <h3>🍕 Tamanho da Pizza</h3>
+    <label><input type="radio" name="tamanho" value="Pizza Grande 4 Sabores - R$60"> Pizza Grande 4 Sabores — R$60,00</label>
+    <label><input type="radio" name="tamanho" value="Pizza Grande 2 Sabores - R$50"> Pizza Grande 2 Sabores — R$50,00</label>
+    <label><input type="radio" name="tamanho" value="Pizza Média - R$45"> Pizza Média — R$45,00</label>
+    <label><input type="radio" name="tamanho" value="Pizza Pequena - R$30"> Pizza Pequena — R$30,00</label>
+  </div>
+
+  <div class="section">
+    <h3>🧀 Borda Família (1 opção)</h3>
+    <label><input type="radio" name="borda" value="Cream Cheese"> Cream Cheese</label>
+    <label><input type="radio" name="borda" value="Catupiry"> Catupiry</label>
+    <label><input type="radio" name="borda" value="Cheddar"> Cheddar</label>
+    <label><input type="radio" name="borda" value="Brigadeiro"> Brigadeiro</label>
+    <label><input type="radio" name="borda" value="Chocolate Branco"> Chocolate Branco</label>
+    <label><input type="radio" name="borda" value="Frango"> Frango</label>
+    <label><input type="radio" name="borda" value="Mussarela"> Mussarela</label>
+    <label><input type="radio" name="borda" value="Nenhuma" checked> Nenhuma</label>
+  </div>
+
+  <div class="section">
+    <h3>🧂 Adicionais (até 3)</h3>
+    <label><input type="checkbox" name="adicional" value="Azeite"> Azeite</label>
+    <label><input type="checkbox" name="adicional" value="Bacon"> Bacon</label>
+    <label><input type="checkbox" name="adicional" value="Batata Palha"> Batata Palha</label>
+    <label><input type="checkbox" name="adicional" value="Calabresa"> Calabresa</label>
+    <label><input type="checkbox" name="adicional" value="Cebola"> Cebola</label>
+    <label><input type="checkbox" name="adicional" value="Ervilha"> Ervilha</label>
+    <label><input type="checkbox" name="adicional" value="Milho"> Milho</label>
+    <label><input type="checkbox" name="adicional" value="Palmito"> Palmito</label>
+    <label><input type="checkbox" name="adicional" value="Pimenta Calabresa"> Pimenta Calabresa</label>
+  </div>
+
+  <div class="section">
+    <h3>🔪 Corte da Pizza</h3>
+    <label><input type="radio" name="corte" value="Fatia"> FATIA: Pizza cortada em fatias</label>
+    <label><input type="radio" name="corte" value="Palito"> PALITO: Pizza cortada em cubinhos</label>
+  </div>
+
+  <div class="section">
+    <h3>🍕 Sabores (mínimo 1)</h3>
+    <label><input type="checkbox" name="sabor" value="MODA DO CHEFE"> (NOVIDADE) MODA DO CHEFE: Calabresa, Bacon, Catupiry, Mussarela, Tomate, Molho e Orégano.</label>
+    <label><input type="checkbox" name="sabor" value="BAURU"> BAURU: Presunto e Mussarela + tomate, palmito, azeitona e orégano.</label>
+    <label><input type="checkbox" name="sabor" value="BACON"> BACON: Mussarela, Bacon, Milho, Cebola e Orégano.</label>
+    <label><input type="checkbox" name="sabor" value="BACON ESPECIAL"> BACON ESPECIAL: Mussarela, Bacon, requeijão, cebola, presunto, orégano.</label>
+    <label><input type="checkbox" name="sabor" value="TESTE"> TESTE: Mussarela.</label>
+  </div>
+
+  <div class="section">
+    <input type="text" id="nome" placeholder="Seu nome" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+    <button type="submit">Enviar Pedido no WhatsApp</button>
+  </div>
+</form>
 
 <script>
-  document.getElementById("btn").onclick = function() {
-    const nome = document.getElementById("nome").value;
-    const pedido = document.getElementById("pedido").value;
-    const tel = "5566996455672";
-    const msg = `Olá, meu nome é ${nome}. Quero pedir: ${pedido}`;
-    this.href = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
-  };
+function enviarPedido() {
+  const nome = document.getElementById("nome").value;
+  const tamanho = document.querySelector('input[name="tamanho"]:checked')?.value || "";
+  const borda = document.querySelector('input[name="borda"]:checked')?.value || "";
+  const corte = document.querySelector('input[name="corte"]:checked')?.value || "";
+
+  const adicionais = [...document.querySelectorAll('input[name="adicional"]:checked')].map(a => a.value).join(", ");
+  const sabores = [...document.querySelectorAll('input[name="sabor"]:checked')].map(s => s.value).join(", ");
+
+  const msg = `Pedido de ${nome}:\n🍕 ${tamanho}\n🧀 Borda: ${borda}\n🧂 Adicionais: ${adicionais}\n🔪 Corte: ${corte}\n🍕 Sabores: ${sabores}`;
+  const tel = "5566996455672";
+  const link = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+  window.open(link, "_blank");
+}
 </script>
+
+</body>
+</html>
