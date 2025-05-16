@@ -12,9 +12,10 @@
       font-size: 18px;
     }
 
-    h2, h3 {
+    h2 {
       color: #ffd700;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
+      text-align: center;
     }
 
     .section {
@@ -76,6 +77,24 @@
       margin-top: 15px;
       cursor: pointer;
     }
+
+    .accordion-btn {
+      background: #000;
+      color: #ffd700;
+      border: 2px solid #ffd700;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .accordion-content {
+      display: none;
+      padding-top: 10px;
+    }
   </style>
 </head>
 <body>
@@ -85,42 +104,48 @@
 <form onsubmit="enviarPedido(); return false;">
 
   <div class="section">
-    <h3>🧀 Borda Família</h3>
-    <div class="btn-group" id="bordaGroup">
-      <label class="btn-option"><input type="radio" name="borda" value="Cream Cheese">Cream Cheese</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Brigadeiro">Brigadeiro</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Chocolate Branco">Chocolate Branco</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Frango">Frango</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Mussarela">Mussarela</label>
-      <label class="btn-option selected"><input type="radio" name="borda" value="" checked>Nenhuma</label>
+    <button type="button" class="accordion-btn" onclick="toggle('bordaContent')">🧀 Escolher Borda</button>
+    <div class="accordion-content" id="bordaContent">
+      <div class="btn-group" id="bordaGroup">
+        <label class="btn-option"><input type="radio" name="borda" value="Cream Cheese">Cream Cheese</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Brigadeiro">Brigadeiro</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Chocolate Branco">Chocolate Branco</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Frango">Frango</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Mussarela">Mussarela</label>
+        <label class="btn-option selected"><input type="radio" name="borda" value="" checked>Nenhuma</label>
+      </div>
     </div>
   </div>
 
   <div class="section">
-    <h3>🧂 Adicionais (até 3)</h3>
-    <div class="btn-group" id="adicionaisGroup">
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Azeite">Azeite</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Batata Palha">Batata Palha</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Calabresa">Calabresa</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Cebola">Cebola</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Ervilha">Ervilha</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Pimenta Calabresa">Pimenta Calabresa</label>
+    <button type="button" class="accordion-btn" onclick="toggle('adicionalContent')">🧂 Escolher Adicionais</button>
+    <div class="accordion-content" id="adicionalContent">
+      <div class="btn-group" id="adicionaisGroup">
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Azeite">Azeite</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Batata Palha">Batata Palha</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Calabresa">Calabresa</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Cebola">Cebola</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Ervilha">Ervilha</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Pimenta Calabresa">Pimenta Calabresa</label>
+      </div>
     </div>
   </div>
 
   <div class="section">
-    <h3>🍕 Sabores (mín. 1 / máx. 4)</h3>
-    <div class="btn-group" id="saboresGroup">
-      <label class="btn-option"><input type="checkbox" name="sabor" value="MODA DO CHEFE">MODA DO CHEFE</label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="BAURU">BAURU</label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="BACON">BACON</label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="BACON ESPECIAL">BACON ESPECIAL</label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="TESTE">TESTE: Mussarela</label>
+    <button type="button" class="accordion-btn" onclick="toggle('saborContent')">🍕 Escolher Sabores</button>
+    <div class="accordion-content" id="saborContent">
+      <div class="btn-group" id="saboresGroup">
+        <label class="btn-option"><input type="checkbox" name="sabor" value="MODA DO CHEFE">MODA DO CHEFE</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BAURU">BAURU</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BACON">BACON</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BACON ESPECIAL">BACON ESPECIAL</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="TESTE">TESTE: Mussarela</label>
+      </div>
     </div>
   </div>
 
@@ -132,7 +157,6 @@
       <option value="Copa X|6">Copa X — R$6,00</option>
       <option value="Centro|5">Centro — R$5,00</option>
       <option value="Colina Verde|6">Colina Verde — R$6,00</option>
-      <!-- Adicione os demais bairros aqui -->
     </select>
   </div>
 
@@ -148,6 +172,11 @@
 </form>
 
 <script>
+function toggle(id) {
+  const el = document.getElementById(id);
+  el.style.display = el.style.display === "block" ? "none" : "block";
+}
+
 function toggleSelect(groupSelector, type, limit = null) {
   document.querySelectorAll(`${groupSelector} input`).forEach(el => {
     el.addEventListener("change", () => {
