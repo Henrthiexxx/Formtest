@@ -10,7 +10,7 @@
     label { display: block; margin: 5px 0; }
     input[type="checkbox"], input[type="radio"], select { margin-right: 5px; }
     button { background: #25d366; color: white; padding: 10px 20px; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
-    select { width: 100%; padding: 10px; border-radius: 6px; margin-top: 10px; }
+    select, input { width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -84,9 +84,12 @@
   </div>
 
   <div class="section">
-    <input type="text" id="nome" placeholder="Seu nome" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
-    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
-    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9" required style="width: 100%; padding: 10px; margin-bottom: 10px;">
+    <input type="text" id="nome" placeholder="Seu nome" required>
+    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2" required>
+    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9" required>
+    <input type="text" id="rua" placeholder="Rua" required>
+    <input type="text" id="numero" placeholder="Número da Casa" required>
+    <input type="text" id="referencia" placeholder="Referência (opcional)">
     <button type="submit">Enviar Pedido no WhatsApp</button>
   </div>
 </form>
@@ -96,8 +99,16 @@ function enviarPedido() {
   const nome = document.getElementById("nome").value.trim();
   const ddd = document.getElementById("ddd").value.trim();
   const celular = document.getElementById("celular").value.trim();
+  const rua = document.getElementById("rua").value.trim();
+  const numero = document.getElementById("numero").value.trim();
+  const referencia = document.getElementById("referencia").value.trim();
+
   if (!/^\d{2}$/.test(ddd) || !/^\d{9}$/.test(celular)) {
     alert("Telefone inválido.");
+    return;
+  }
+  if (!rua || !numero) {
+    alert("Preencha Rua e Número da Casa.");
     return;
   }
 
@@ -126,6 +137,7 @@ function enviarPedido() {
 
   const total = precoBase + precoBorda + precoAdicionais + precoEntrega;
   const linkContato = `https://wa.me/55${ddd}${celular}`;
+  const enderecoCompleto = `Rua ${rua}, Nº ${numero}` + (referencia ? ` (${referencia})` : "");
 
   const msg = 
 `Pedido de ${nome}:
@@ -134,6 +146,7 @@ function enviarPedido() {
 🧂 Adicionais: ${adicionais || "Nenhum"} (R$${precoAdicionais})
 🍕 Sabores: ${sabores}
 🚚 Entrega: ${bairro} (R$${precoEntrega})
+📍 Endereço: ${enderecoCompleto}
 💰 Total: R$${total},00
 📞 Contato: ${linkContato}`;
 
@@ -142,7 +155,7 @@ function enviarPedido() {
   window.open(link, "_blank");
 }
 
-// Limites ao marcar
+// Limites
 document.querySelectorAll('input[name="adicional"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const selecionados = document.querySelectorAll('input[name="adicional"]:checked');
