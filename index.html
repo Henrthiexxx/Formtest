@@ -153,7 +153,7 @@ fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?
         container.appendChild(label);
       });
     });
-
+ document.getElementById("saborContent").classList.add("show");
     toggleSelect("#saboresGroup", "checkbox", 4);
   });
 
