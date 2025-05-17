@@ -44,8 +44,7 @@
       color: #000;
       font-weight: bold;
     }
-    input[type="checkbox"],
-    input[type="radio"] {
+    input[type="checkbox"], input[type="radio"] {
       display: none;
     }
     select, input, button {
@@ -84,27 +83,90 @@
       display: none;
       padding-top: 10px;
     }
+    .accordion-content.show {
+      display: block;
+    }
   </style>
 </head>
 <body>
-
 <h2>🍕 Pizza Grande 4 Sabores — R$60,00</h2>
-
 <form onsubmit="enviarPedido(); return false;">
   <div class="section">
     <button type="button" class="accordion-btn" onclick="toggle('saborContent')">🍕 Escolher Sabores</button>
     <div class="accordion-content" id="saborContent">
+      <h3 style="color:#ffd700">🍽️ Tradicionais</h3>
       <div class="btn-group" id="saboresGroup">
-        <p>Carregando sabores...</p>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="4 QUEIJOS"><strong>4 QUEIJOS</strong><br><span style="font-size:14px;color:#ccc">Mussarela fundida com queijo provolone, queijo parmesão e catupiry.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BACON"><strong>BACON</strong><br><span style="font-size:14px;color:#ccc">Clássico com bacon, milho, cebola e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BAURU"><strong>BAURU</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, tomate, palmito, azeitona e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BROCOLIS"><strong>BROCOLIS</strong><br><span style="font-size:14px;color:#ccc">Brócolis, bacon, requeijão e mussarela.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="CAIPIRA"><strong>CAIPIRA</strong><br><span style="font-size:14px;color:#ccc">Presunto, frango, mussarela, ovo e ervilha.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="CALABRESA"><strong>CALABRESA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, calabresa, cebola e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="DONNA"><strong>DONNA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, presunto, ervilha, bacon e batata palha.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="DON RUAN"><strong>DON RUAN</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, bacon, parmesão e alho.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO COM CATUPIRY"><strong>FRANGO COM CATUPIRY</strong><br><span style="font-size:14px;color:#ccc">Frango ao molho com catupiry.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO ESPECIAL"><strong>FRANGO ESPECIAL</strong><br><span style="font-size:14px;color:#ccc">Frango ao molho, mussarela e palmito.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="LOMBO AO CREME"><strong>LOMBO AO CREME</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, lombo canadense e requeijão.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="MARGUERITA"><strong>MARGUERITA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, tomate e manjericão.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="PORTUGUESA"><strong>PORTUGUESA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, ovo, milho e ervilha.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="VEGETARIANA"><strong>VEGETARIANA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, tomate, milho, palmito, requeijão e orégano.</span></label>
+      </div>
+
+      <h3 style="color:#ffd700;margin-top:20px">⭐ Especiais</h3>
+      <div class="btn-group">
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BACON ESPECIAL"><strong>BACON ESPECIAL</strong><br><span style="font-size:14px;color:#ccc">Bacon, mussarela, requeijão, cebola, presunto e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="CALABACON"><strong>CALABACON</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, mussarela, milho, palmito e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="MAMMA MIA"><strong>MAMMA MIA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, bacon, tomate, requeijão e cebola.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="MEXICANA"><strong>MEXICANA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, pimenta calabresa, cebola e azeitona.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="PISA"><strong>PISA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, presunto, calabresa, cebola e azeite.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="SUPER BACON CHEDDAR"><strong>SUPER BACON CHEDDAR</strong><br><span style="font-size:14px;color:#ccc">Mussarela com bacon e cheddar.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="SUPER HAMBURGER CHEDDAR"><strong>SUPER HAMBURGER CHEDDAR</strong><br><span style="font-size:14px;color:#ccc">Mussarela com hamburger e cheddar.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="STROGONOFF DE FRANGO"><strong>STROGONOFF DE FRANGO</strong><br><span style="font-size:14px;color:#ccc">Strogonoff de frango com batata palha.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="VENEZA"><strong>VENEZA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, parmesão, lombo, requeijão, palmito e biquinho.</span></label>
+      </div>
+
+      <h3 style="color:#ffd700;margin-top:20px">🚨 Novidades</h3>
+      <div class="btn-group">
+        <label class="btn-option"><input type="checkbox" name="sabor" value="CALABRESA REAL"><strong>CALABRESA REAL</strong><br><span style="font-size:14px;color:#ccc">Molho, presunto, calabresa, tomate, pimenta, cebola e orégano.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO CHEESE"><strong>FRANGO CHEESE</strong><br><span style="font-size:14px;color:#ccc">Frango coberto por cream cheese.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="MODO CHEFE"><strong>MODO CHEFE</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, catupiry, mussarela, tomate, milho e orégano.</span></label>
+      </div>
+
+      <h3 style="color:#ffd700;margin-top:20px">🍫 Sabores Doces</h3>
+      <div class="btn-group">
+        <label class="btn-option"><input type="checkbox" name="sabor" value="BRIGADEIRO"><strong>BRIGADEIRO</strong><br><span style="font-size:14px;color:#ccc">Chocolate brigadeiro e granulado.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="NINHO"><strong>NINHO</strong><br><span style="font-size:14px;color:#ccc">Chocolate branco e ninho.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="POWER AVELA"><strong>POWER AVELA</strong><br><span style="font-size:14px;color:#ccc">Creme de avelã, granulado e paçoca.</span></label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="POWER DUO"><strong>POWER DUO</strong><br><span style="font-size:14px;color:#ccc">Mussarela, brigadeiro e granulado.</span></label>
       </div>
     </div>
+  </div>
+  <div class="section">
+    <h3>📍 Entrega</h3>
+    <select id="entrega" required>
+      <option value="Retirada no Local|0">Retirada no Local — R$0,00</option>
+      <option value="Chico Simão|5">Chico Simão — R$5,00</option>
+      <option value="Copa X|6">Copa X — R$6,00</option>
+      <option value="Centro|5">Centro — R$5,00</option>
+      <option value="Colina Verde|6">Colina Verde — R$6,00</option>
+    </select>
+  </div>
+
+  <div class="section">
+    <input type="text" id="nome" placeholder="Seu nome" required>
+    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2" required>
+    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9" required>
+    <input type="text" id="rua" placeholder="Rua" required>
+    <input type="text" id="numero" placeholder="Número da Casa" required>
+    <input type="text" id="referencia" placeholder="Referência (opcional)">
+    <button type="submit">Enviar Pedido no WhatsApp</button>
   </div>
 </form>
 
 <script>
 function toggle(id) {
   const el = document.getElementById(id);
-  el.style.display = el.style.display === "block" ? "none" : "block";
+  el.classList.toggle("show");
 }
 
 function toggleSelect(groupSelector, type, limit = null) {
@@ -127,23 +189,56 @@ function toggleSelect(groupSelector, type, limit = null) {
   });
 }
 
-fetch("https://opensheet.elk.sh/2PACX-1vTVfjt5fbhWyfpn56b3xLDVOtEOcs6El84vNpJhzA7t0d0hwyiQxd1Hn3v2E4weCQlseCX1-fi7uZ6b/Sabores")
-  .then(res => res.json())
-  .then(data => {
-    const grupo = document.getElementById("saboresGroup");
-    grupo.innerHTML = "";
-    data.forEach(item => {
-      const label = document.createElement("label");
-      label.className = "btn-option";
-      label.innerHTML = `
-        <input type="checkbox" name="sabor" value="${item.NOME}">
-        <strong>${item.NOME}</strong><br>
-        <span style="font-size:14px;color:#ccc">${item.DESCRICAO}</span>
-      `;
-      grupo.appendChild(label);
-    });
-    toggleSelect("#saboresGroup", "checkbox", 4);
-  });
+toggleSelect("#bordaGroup", "radio");
+toggleSelect("#adicionaisGroup", "checkbox", 3);
+toggleSelect("#saboresGroup", "checkbox", 4);
+
+function enviarPedido() {
+  const nome = document.getElementById("nome").value.trim();
+  const ddd = document.getElementById("ddd").value.trim();
+  const celular = document.getElementById("celular").value.trim();
+  const rua = document.getElementById("rua").value.trim();
+  const numero = document.getElementById("numero").value.trim();
+  const referencia = document.getElementById("referencia").value.trim();
+
+  if (!/^\d{2}$/.test(ddd) || !/^\d{9}$/.test(celular)) return alert("Telefone inválido.");
+  if (!rua || !numero) return alert("Preencha Rua e Número.");
+
+  const precoBase = 60;
+  const borda = document.querySelector('input[name="borda"]:checked')?.value || "Nenhuma";
+  const precoBorda = borda ? 10 : 0;
+
+  const adicionaisSel = [...document.querySelectorAll('input[name="adicional"]:checked')];
+  const adicionais = adicionaisSel.map(a => a.value).join(", ") || "Nenhum";
+  const precoAdicionais = adicionaisSel.length;
+
+  const saboresSel = [...document.querySelectorAll('input[name="sabor"]:checked')];
+  if (saboresSel.length < 1 || saboresSel.length > 4) return alert("Escolha de 1 a 4 sabores.");
+  const sabores = saboresSel.map(s => s.value).join(", ");
+
+  const entregaRaw = document.getElementById("entrega").value.split("|");
+  const bairro = entregaRaw[0];
+  const precoEntrega = parseFloat(entregaRaw[1]);
+
+  const total = precoBase + precoBorda + precoAdicionais + precoEntrega;
+  const linkContato = `https://wa.me/55${ddd}${celular}`;
+  const enderecoCompleto = `Rua ${rua}, Nº ${numero}` + (referencia ? ` (${referencia})` : "");
+
+  const msg = 
+`Pedido de ${nome}:
+🍕 Pizza Grande 4 Sabores — R$60,00
+🧀 Borda: ${borda} (R$${precoBorda})
+🧂 Adicionais: ${adicionais} (R$${precoAdicionais})
+🍕 Sabores: ${sabores}
+🚚 Entrega: ${bairro} (R$${precoEntrega})
+📍 Endereço: ${enderecoCompleto}
+💰 Total: R$${total},00
+📞 Contato: ${linkContato}`;
+
+  const tel = "5566996455672";
+  const link = `https://wa.me/${tel}?text=${encodeURIComponent(msg)}`;
+  window.open(link, "_blank");
+}
 </script>
 
 </body>
