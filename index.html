@@ -141,41 +141,56 @@
     <div class="accordion-content" id="saborContent">
       <div class="btn-group" id="saboresGroup">
 <div class="section">
-    <h3>🍕 Sabores (mínimo 1 - máximo 4)</h3>
-    <label><input type="checkbox" name="sabor" value="4 QUEIJOS"> 4 QUEIJOS: Mussarela fundida com queijo provolone, queijo parmesão e catupiry.</label>
-    <label><input type="checkbox" name="sabor" value="BACON"> BACON: Um clássico que pode ficar com mais bacon, milho, cebola e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BACON ESPECIAL"> BACON ESPECIAL: O que era bom fica ainda melhor! Agora com mussarela, fatias de bacon cobertas por requeijão cremoso, cebola também com presunto e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BAURU"> BAURU: O delicioso sabor tradicional de presunto e mussarela acompanhado de tomate, palmito, azeitona e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="BROCOLIS"> BROCOLIS: Com pedaços de brócolis e bacon um toque suave de requeijão e mussarela!</label>
-    <label><input type="checkbox" name="sabor" value="CAIPIRA"> CAIPIRA: Presunto, frango, mussarela, ovo e ervilha.</label>
-    <label><input type="checkbox" name="sabor" value="CALABRESA"> CALABRESA: Presunto e mussarela coberta por fatias de calabresa, cebola e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="CALABRESA REAL (NOVIDADE)"> CALABRESA REAL (NOVIDADE): Molho, presunto e muita calabresa com tomate e uma leve pitada de pimenta, cebola e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="CALABACON"> CALABACON: Uma junção simples de fatias de calabresa e bacon com mussarela, milho, palmito e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="DONNA"> DONNA: Mussarela, presunto, ervilha e bacon coberto por batata palha.</label>
-    <label><input type="checkbox" name="sabor" value="DON RUAN"> DON RUAN: Presunto, mussarela, bacon, queijo parmesão e um leve toque de alho.</label>
-    <label><input type="checkbox" name="sabor" value="FRANGO CHEESE (NOVIDADE)"> FRANGO CHEESE (NOVIDADE): Nosso delicioso frango coberto por linhas de cream cheese.</label>
-    <label><input type="checkbox" name="sabor" value="FRANGO COM CATUPIRY"> FRANGO COM CATUPIRY: Nosso delicioso frango ao molho coberto de catupiry.</label>
-    <label><input type="checkbox" name="sabor" value="FRANGO ESPECIAL"> FRANGO ESPECIAL: Frango ao molho coberto por mussarela e pedacinhos de palmito.</label>
-    <label><input type="checkbox" name="sabor" value="LOMBO AO CREME"> LOMBO AO CREME: Sabor cremoso de presunto, queijo mussarela, lombo canadense e mussarela.</label>
-    <label><input type="checkbox" name="sabor" value="MAMMA MIA"> MAMMA MIA: A famosa da casa com presunto, mussarela, bacon, fatias de tomate com requeijão e cebola.</label>
-    <label><input type="checkbox" name="sabor" value="MARGUERITA"> MARGUERITA: Nossas pizzas leve de mussarela com fatias de tomate e folhinhas de manjericão.</label>
-    <label><input type="checkbox" name="sabor" value="MEXICANA"> MEXICANA: Presunto, mussarela, pimenta calabresa, cebola e azeitona.</label>
-    <label><input type="checkbox" name="sabor" value="NOVIDADE (MODO CHEFE)"> NOVIDADE (MODO CHEFE): Calabresa, bacon, catupiry, mussarela, tomate, milho e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="PISA"> PISA: Pizza deliciosa de mussarela e presunto com fatias de calabresa e cebola com toque de azeite.</label>
-    <label><input type="checkbox" name="sabor" value="PORTUGUESA"> PORTUGUESA: Presunto, mussarela acompanhado de ovo e milho com ervilha.</label>
-    <label><input type="checkbox" name="sabor" value="SUPER BACON CHEDDAR"> SUPER BACON CHEDDAR: Mussarela com fatias de bacon coberto por cheddar.</label>
-    <label><input type="checkbox" name="sabor" value="SUPER HAMBURGER CHEDDAR"> SUPER HAMBURGER CHEDDAR: Mussarela com fatias de hamburger coberto por cheddar.</label>
-    <label><input type="checkbox" name="sabor" value="STROGONOFF DE FRANGO"> STROGONOFF DE FRANGO: Nosso delicioso strogonoff frango coberto por batata palha.</label>
-    <label><input type="checkbox" name="sabor" value="VEGETARIANA"> VEGETARIANA: Uma delícia sutil com mussarela, tomate, milho e palmito coberto por requeijão e orégano.</label>
-    <label><input type="checkbox" name="sabor" value="VENEZA"> VENEZA: Uma delícia com presunto, mussarela e queijos parmesão, lombo canadense, requeijão cremoso, palmito e biquinho (que não arde).</label>
-    <label><input type="checkbox" name="sabor" value="(DOCE) BRIGADEIRO"> (DOCE) BRIGADEIRO: Chocolate brigadeiro e granulado.</label>
-    <label><input type="checkbox" name="sabor" value="(DOCE) NINHO"> (DOCE) NINHO: Chocolate branco e ninho.</label>
-    <label><input type="checkbox" name="sabor" value="(DOCE) POWER AVELA"> (DOCE) POWER AVELA: Creme de avelã, granulado e paçoca.</label>
-    <label><input type="checkbox" name="sabor" value="(DOCE) POWER DUO"> (DOCE) POWER DUO: Mussarela, brigadeiro e granulado.</label>
-</div>
-      </div>
+  <button type="button" class="accordion-btn" onclick="toggle('saborContent')">🍕 Escolher Sabores</button>
+  <div class="accordion-content" id="saborContent">
+    <h3 style="color:#ffd700">🍽️ Tradicionais</h3>
+    <div class="btn-group" id="saboresGroup">
+      <label class="btn-option"><input type="checkbox" name="sabor" value="4 QUEIJOS"><strong>4 QUEIJOS</strong><br><span style="font-size:14px;color:#ccc">Mussarela fundida com queijo provolone, queijo parmesão e catupiry.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="BACON"><strong>BACON</strong><br><span style="font-size:14px;color:#ccc">Clássico com bacon, milho, cebola e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="BAURU"><strong>BAURU</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, tomate, palmito, azeitona e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="BROCOLIS"><strong>BROCOLIS</strong><br><span style="font-size:14px;color:#ccc">Brócolis, bacon, requeijão e mussarela.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="CAIPIRA"><strong>CAIPIRA</strong><br><span style="font-size:14px;color:#ccc">Presunto, frango, mussarela, ovo e ervilha.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="CALABRESA"><strong>CALABRESA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, calabresa, cebola e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="DONNA"><strong>DONNA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, presunto, ervilha, bacon e batata palha.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="DON RUAN"><strong>DON RUAN</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, bacon, parmesão e toque de alho.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO COM CATUPIRY"><strong>FRANGO COM CATUPIRY</strong><br><span style="font-size:14px;color:#ccc">Frango ao molho coberto com catupiry.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO ESPECIAL"><strong>FRANGO ESPECIAL</strong><br><span style="font-size:14px;color:#ccc">Frango ao molho, mussarela e palmito.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="LOMBO AO CREME"><strong>LOMBO AO CREME</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, lombo canadense e requeijão.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="MARGUERITA"><strong>MARGUERITA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, tomate e manjericão.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="PORTUGUESA"><strong>PORTUGUESA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, ovo, milho e ervilha.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="VEGETARIANA"><strong>VEGETARIANA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, tomate, milho, palmito, requeijão e orégano.</span></label>
+    </div>
+
+    <h3 style="color:#ffd700; margin-top:20px;">⭐ Especiais</h3>
+    <div class="btn-group">
+      <label class="btn-option"><input type="checkbox" name="sabor" value="BACON ESPECIAL"><strong>BACON ESPECIAL</strong><br><span style="font-size:14px;color:#ccc">Mussarela, bacon, requeijão, cebola, presunto e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="CALABACON"><strong>CALABACON</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, mussarela, milho, palmito e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="MAMMA MIA"><strong>MAMMA MIA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, bacon, tomate, requeijão e cebola.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="MEXICANA"><strong>MEXICANA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, pimenta calabresa, cebola e azeitona.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="PISA"><strong>PISA</strong><br><span style="font-size:14px;color:#ccc">Mussarela, presunto, calabresa, cebola e azeite.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="SUPER BACON CHEDDAR"><strong>SUPER BACON CHEDDAR</strong><br><span style="font-size:14px;color:#ccc">Mussarela com bacon coberto por cheddar.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="SUPER HAMBURGER CHEDDAR"><strong>SUPER HAMBURGER CHEDDAR</strong><br><span style="font-size:14px;color:#ccc">Mussarela com hamburger coberto por cheddar.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="STROGONOFF DE FRANGO"><strong>STROGONOFF DE FRANGO</strong><br><span style="font-size:14px;color:#ccc">Strogonoff de frango com batata palha.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="VENEZA"><strong>VENEZA</strong><br><span style="font-size:14px;color:#ccc">Presunto, mussarela, parmesão, lombo, requeijão, palmito e biquinho.</span></label>
+    </div>
+
+    <h3 style="color:#ffd700; margin-top:20px;">🚨 Novidades</h3>
+    <div class="btn-group">
+      <label class="btn-option"><input type="checkbox" name="sabor" value="CALABRESA REAL"><strong>CALABRESA REAL</strong><br><span style="font-size:14px;color:#ccc">Molho, presunto, calabresa, tomate, pimenta, cebola e orégano.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="FRANGO CHEESE"><strong>FRANGO CHEESE</strong><br><span style="font-size:14px;color:#ccc">Frango coberto por cream cheese.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="MODO CHEFE"><strong>MODO CHEFE</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, catupiry, mussarela, tomate, milho e orégano.</span></label>
+    </div>
+
+    <h3 style="color:#ffd700; margin-top:20px;">🍫 Sabores Doces</h3>
+    <div class="btn-group">
+      <label class="btn-option"><input type="checkbox" name="sabor" value="BRIGADEIRO"><strong>BRIGADEIRO</strong><br><span style="font-size:14px;color:#ccc">Chocolate brigadeiro e granulado.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="NINHO"><strong>NINHO</strong><br><span style="font-size:14px;color:#ccc">Chocolate branco e ninho.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="POWER AVELA"><strong>POWER AVELA</strong><br><span style="font-size:14px;color:#ccc">Creme de avelã, granulado e paçoca.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="POWER DUO"><strong>POWER DUO</strong><br><span style="font-size:14px;color:#ccc">Mussarela, brigadeiro e granulado.</span></label>
     </div>
   </div>
+</div>
+
 
   <div class="section">
     <h3>📍 Entrega</h3>
