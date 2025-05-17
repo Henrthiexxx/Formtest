@@ -44,8 +44,7 @@
       color: #000;
       font-weight: bold;
     }
-    input[type="checkbox"],
-    input[type="radio"] {
+    input[type="checkbox"], input[type="radio"] {
       display: none;
     }
     select, input, button {
@@ -94,33 +93,28 @@
 <form onsubmit="enviarPedido(); return false;">
   <div class="section">
     <button type="button" class="accordion-btn" onclick="toggle('saborContent')">🍕 Escolher Sabores</button>
-    <div class="accordion-content show" id="saborContent">
+    <div class="accordion-content" id="saborContent">
       <div id="saboresGroup" class="btn-group"></div>
     </div>
   </div>
-  <!-- 🔽 Cole isso aqui -->
-<div class="section">
-  <h3>🧀 Escolha a Borda</h3>
-  <div class="btn-group" id="bordaGroup">
-    <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
-    <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
-    <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
-  </div>
-</div>
 
-<div class="section">
-  <h3>🧂 Adicionais (máx. 3)</h3>
-  <div class="btn-group" id="adicionaisGroup">
-    <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
-    <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
-    <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
+  <div class="section">
+    <h3>🧀 Escolha a Borda</h3>
+    <div class="btn-group" id="bordaGroup">
+      <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
+      <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
+      <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
+    </div>
   </div>
-</div>
-<!-- 🔼 Até aqui -->
 
-<!-- Essa é a linha que já estava no seu HTML -->
-<div class="section">
-  <h3>📍 Entrega</h3>
+  <div class="section">
+    <h3>🧂 Adicionais (máx. 3)</h3>
+    <div class="btn-group" id="adicionaisGroup">
+      <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
+      <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
+      <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
+    </div>
+  </div>
 
   <div class="section">
     <h3>📍 Entrega</h3>
@@ -143,7 +137,6 @@
     <button type="submit">Enviar Pedido no WhatsApp</button>
   </div>
 </form>
-
 <script>
 const apiKey = "AIzaSyDIask_b2xaSjN2w8pFnoaEQiOKG00KYhk";
 const sheetId = "1xnPxcv7yls3s22FmszroxGHkz3VCq9afaadlw3cQlr8";
@@ -154,6 +147,8 @@ fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?
   .then(data => {
     const container = document.getElementById("saboresGroup");
     const categorias = {};
+
+    if (!data.values) return alert("Erro ao carregar sabores");
 
     data.values.forEach(([nome, descricao, categoria]) => {
       if (!categorias[categoria]) categorias[categoria] = [];
@@ -177,9 +172,11 @@ fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?
         container.appendChild(label);
       });
     });
- document.getElementById("saborContent").classList.add("show");
+
     toggleSelect("#saboresGroup", "checkbox", 4);
-  });
+    document.getElementById("saborContent").classList.add("show");
+  })
+  .catch(err => console.error("Erro ao carregar sabores:", err));
 
 function toggle(id) {
   const el = document.getElementById(id);
