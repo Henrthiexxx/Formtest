@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Meu Carrinho</title>
+  <title>Endereço de Entrega</title>
   <style>
     body {
       background: #0d0d0d;
@@ -11,85 +11,89 @@
       padding: 20px;
     }
     h2 {
-      text-align: center;
       color: #ffd700;
+      text-align: center;
     }
-    .pedido {
+    .section {
       background: #1a1a1a;
       border: 1px solid #333;
       border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 15px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    input, select {
+      background: #1a1a1a;
+      color: #ffd700;
+      border: 1px solid #ffd700;
     }
     button {
       background: #ffd700;
       color: #000;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
       font-weight: bold;
-      margin: 10px 5px 0 0;
+      margin-top: 20px;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>🛒 Carrinho de Pedidos</h2>
-  <div id="listaPedidos"></div>
-  <div style="text-align:center">
-    <button onclick="enviarTodosPedidos()">📲 Enviar todos via WhatsApp</button>
-    <button onclick="limparCarrinho()">🗑️ Limpar Carrinho</button>
+  <h2>📍 Meu Endereço</h2>
+  <div class="section">
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2">
+    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9">
+    <input type="text" id="rua" placeholder="Rua">
+    <input type="text" id="numero" placeholder="Número da Casa">
+    <input type="text" id="referencia" placeholder="Referência (opcional)">
+
+    <select id="entrega">
+      <option value="Retirada no Local|0">Retirada no Local — R$0,00</option>
+      <option value="Chico Simão|5">Chico Simão — R$5,00</option>
+      <option value="Copa X|6">Copa X — R$6,00</option>
+      <option value="Centro|5">Centro — R$5,00</option>
+      <option value="Colina Verde|6">Colina Verde — R$6,00</option>
+    </select>
+
+    <button onclick="salvarEndereco()">💾 Salvar Endereço</button>
+    <button onclick="window.location.href='index.html'">🏠 Voltar ao Início</button>
   </div>
 
-<script>
-const container = document.getElementById('listaPedidos');
-const pedidos = JSON.parse(localStorage.getItem('carrinho')) || [];
+  <script>
+    function salvarEndereco() {
+      const endereco = {
+        nome: document.getElementById('nome').value.trim(),
+        ddd: document.getElementById('ddd').value.trim(),
+        celular: document.getElementById('celular').value.trim(),
+        rua: document.getElementById('rua').value.trim(),
+        numero: document.getElementById('numero').value.trim(),
+        referencia: document.getElementById('referencia').value.trim(),
+        entrega: document.getElementById('entrega').value
+      };
+      localStorage.setItem('enderecoCliente', JSON.stringify(endereco));
+      alert('Endereço salvo com sucesso!');
+    }
 
-if (pedidos.length === 0) {
-  container.innerHTML = '<p style="text-align:center">Carrinho vazio.</p>';
-} else {
-  pedidos.forEach((pedido, i) => {
-    const div = document.createElement('div');
-    div.className = 'pedido';
-    div.innerHTML = `
-      <strong>Produto:</strong> ${pedido.produto || 'Pizza'}<br>
-      <strong>Tamanho:</strong> ${pedido.tamanho || 'N/D'}<br>
-      <strong>Sabores:</strong> ${pedido.sabores?.join(', ') || 'N/D'}<br>
-      <strong>Borda:</strong> ${pedido.borda || 'Nenhuma'}<br>
-      <strong>Adicionais:</strong> ${pedido.adicionais?.join(', ') || 'Nenhum'}<br>
-      <strong>Bebidas:</strong> ${pedido.bebidas?.join(', ') || 'Nenhuma'}<br>
-      <strong>Endereço:</strong> ${pedido.endereco || 'N/D'}<br>
-      <strong>Nome:</strong> ${pedido.nome || 'N/D'}<br>
-      <strong>Data:</strong> ${new Date(pedido.data).toLocaleString()}<br>
-    `;
-    container.appendChild(div);
-  });
-}
-
-function limparCarrinho() {
-  if (confirm('Tem certeza que deseja limpar o carrinho?')) {
-    localStorage.removeItem('carrinho');
-    location.reload();
-  }
-}
-
-function enviarTodosPedidos() {
-  const numero = '5566996455672'; // Altere aqui seu número do WhatsApp
-  let mensagem = '*Pedidos acumulados no carrinho:*\n\n';
-  pedidos.forEach((p, i) => {
-    mensagem += `🔸 *Pedido ${i+1}*\n` +
-                `Produto: ${p.produto || 'Pizza'}\n` +
-                `Tamanho: ${p.tamanho || 'N/D'}\n` +
-                `Sabores: ${p.sabores?.join(', ') || 'N/D'}\n` +
-                `Borda: ${p.borda || 'Nenhuma'}\n` +
-                `Adicionais: ${p.adicionais?.join(', ') || 'Nenhum'}\n` +
-                `Bebidas: ${p.bebidas?.join(', ') || 'Nenhuma'}\n` +
-                `Endereço: ${p.endereco || 'N/D'}\n` +
-                `Nome: ${p.nome || 'N/D'}\n\n`;
-  });
-  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
-  window.open(url, '_blank');
-}
-</script>
+    // Pré-carrega se já existir
+    window.onload = () => {
+      const dados = JSON.parse(localStorage.getItem('enderecoCliente'));
+      if (dados) {
+        document.getElementById('nome').value = dados.nome || '';
+        document.getElementById('ddd').value = dados.ddd || '';
+        document.getElementById('celular').value = dados.celular || '';
+        document.getElementById('rua').value = dados.rua || '';
+        document.getElementById('numero').value = dados.numero || '';
+        document.getElementById('referencia').value = dados.referencia || '';
+        document.getElementById('entrega').value = dados.entrega || '';
+      }
+    }
+  </script>
 </body>
 </html>
