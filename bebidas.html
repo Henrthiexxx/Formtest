@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select Your Beverages</title>
+  <link rel="stylesheet" href="https://henrthiexxx.github.io/Formtest/style.css">
+</head>
+<body>
+  <h2>🥤 Select Your Beverages</h2>
+  <form onsubmit="saveBeverages(); return false;">
+    <div class="section" id="beverageGroup">
+      <!-- You can duplicate or edit these blocks as needed -->
+      <label class="btn-option">
+        <input type="checkbox" name="beverage" value="Coca-Cola 2L">
+        Coca-Cola 2L
+      </label>
+      <label class="btn-option">
+        <input type="checkbox" name="beverage" value="Guaraná 1L">
+        Guaraná 1L
+      </label>
+      <label class="btn-option">
+        <input type="checkbox" name="beverage" value="Orange Juice">
+        Orange Juice
+      </label>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="display: flex; gap: 10px; margin-top: 20px;">
+      <button type="submit">💾 Save Beverages</button>
+      <button type="button" onclick="window.location.href='index.html'">🏠 Back to Home</button>
+      <button type="button" onclick="window.location.href='cart.html'">🛒 Go to Cart</button>
+    </div>
+  </form>
+
+  <!-- JavaScript to save selected beverages to localStorage -->
+  <script>
+    function saveBeverages() {
+      const selected = [...document.querySelectorAll('input[name="beverage"]:checked')].map(e => e.value);
+      localStorage.setItem('selectedBeverages', JSON.stringify(selected));
+      alert('Beverages saved!');
+    }
+
+    // Load saved beverages if available
+    window.onload = () => {
+      const saved = JSON.parse(localStorage.getItem('selectedBeverages')) || [];
+      saved.forEach(name => {
+        const input = [...document.querySelectorAll('input[name="beverage"]')].find(e => e.value === name);
+        if (input) input.checked = true;
+      });
+    };
+  </script>
+
+  <!--
+    🛠️ GUIDE FOR CUSTOMIZATION:
+    - To change the beverage name, edit the <label> text and the input value.
+    - To add more options, duplicate the <label> blocks inside #beverageGroup.
+    - To change button destinations, edit window.location.href values.
+  -->
+</body>
+</html>
