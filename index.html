@@ -78,7 +78,7 @@
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
 
-<form onsubmit="finalizarPedido(); return false;">
+<form onsubmit="salvarPedido(); return false;">
   <div id="etapa2" class="etapa ativa section">
     <h3>1. Escolha até 4 Sabores</h3>
     <div class="btn-group" id="saboresGroup">
@@ -107,7 +107,33 @@
     <button type="button" onclick="voltarEtapa(2)">Voltar</button>
     <button type="submit">Finalizar Pedido</button>
   </div>
+  <div style="display: flex; gap: 10px; margin-top: 20px;">
+    <!-- Botão Finalizar Pedido (já funcional) -->
+    <button type="submit">Finalizar Pedido</button>
+
+    <!-- Botão 1 - Exemplo de outro link -->
+    <button type="button" onclick="window.location.href='https://example.com'">
+      Outro Botão 1
+    </button>
+
+    <!-- Botão 2 - Exemplo de ação customizada -->
+    <button type="button" onclick="alert('Ação personalizada aqui');">
+      Outro Botão 2
+    </button>
+
+    <!-- Botão 3 - Voltar à página inicial -->
+    <button type="button" onclick="window.location.href='index.html'">
+      Página Inicial
+    </button>
+  </div>
 </form>
+
+<!--
+  🔧 GUIA DE EDIÇÃO DOS BOTÕES:
+  - Para alterar o TEXTO do botão, mude o conteúdo entre <button> e </button>
+  - Para alterar o LINK, edite o valor de window.location.href='SEULINK'
+  - Para ações JavaScript, edite o conteúdo da função onclick="..."
+-->
 
 <script>
 let etapaAtual = 2;
@@ -146,9 +172,6 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
-  function finalizarPedido() {
-  alert("Pedido salvo com sucesso!"); // ou redirecione, envie, etc.
-}
 </script>
 </body>
 </html>
