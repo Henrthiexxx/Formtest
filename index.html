@@ -78,7 +78,7 @@
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
 
-<form onsubmit="salvarPedido(); return false;">
+<form onsubmit="finalizarPedido(); return false;">
   <div id="etapa2" class="etapa ativa section">
     <h3>1. Escolha até 4 Sabores</h3>
     <div class="btn-group" id="saboresGroup">
@@ -146,6 +146,9 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
+  function finalizarPedido() {
+  alert("Pedido salvo com sucesso!"); // ou redirecione, envie, etc.
+}
 </script>
 </body>
 </html>
