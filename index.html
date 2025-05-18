@@ -73,49 +73,26 @@
       margin-top: 15px;
       cursor: pointer;
     }
-    .accordion-btn {
-      background: #000;
-      color: #ffd700;
-      border: 2px solid #ffd700;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 18px;
-      margin-bottom: 10px;
-      text-align: left;
-      cursor: pointer;
-      width: 100%;
-    }
-    .accordion-content {
-      display: none;
-      padding-top: 10px;
-    }
-    .accordion-content.show {
-      display: block;
-    }
   </style>
 </head>
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
 
-<!-- Etapas do formulário -->
 <form onsubmit="salvarPedido(); return false;">
-  <div id="etapa1" class="etapa ativa section">
-    <h3>1. Escolha o Tamanho</h3>
-    <div class="btn-group">
-      <label class="btn-option"><input type="radio" name="tamanho" value="Grande" checked>Grande</label>
+  <div id="etapa2" class="etapa ativa section">
+    <h3>1. Escolha até 4 Sabores</h3>
+    <div class="btn-group" id="saboresGroup">
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"><strong>Sabores do Campo</strong><br><span style="font-size:14px;color:#ccc">Milho, ervilha, mussarela e toque de alho.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"><strong>Carnuda Suprema</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, presunto e queijo fundido.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"><strong>Verde Leve</strong><br><span style="font-size:14px;color:#ccc">Brócolis, palmito, requeijão e cebola roxa.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"><strong>Doce Tentação</strong><br><span style="font-size:14px;color:#ccc">Chocolate ao leite com morango e granulado.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"><strong>Quatro Delícias</strong><br><span style="font-size:14px;color:#ccc">Mussarela, cheddar, gorgonzola e parmesão.</span></label>
     </div>
-    <button type="button" onclick="proximaEtapa(2)">Próximo</button>
-  </div>
-
-  <div id="etapa2" class="etapa section">
-    <h3>2. Escolha até 4 Sabores</h3>
-    <div class="btn-group" id="saboresGroup"></div>
-    <button type="button" onclick="voltarEtapa(1)">Voltar</button>
     <button type="button" onclick="proximaEtapa(3)">Próximo</button>
   </div>
 
   <div id="etapa3" class="etapa section">
-    <h3>3. Escolha a Borda</h3>
+    <h3>2. Escolha a Borda</h3>
     <div class="btn-group" id="bordaGroup">
       <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
       <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
@@ -128,42 +105,12 @@
       <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
     </div>
     <button type="button" onclick="voltarEtapa(2)">Voltar</button>
-    <button type="button" onclick="proximaEtapa(4)">Próximo</button>
-  </div>
-
-  <div id="etapa4" class="etapa section">
-    <h3>4. Escolha as Bebidas</h3>
-    <div class="btn-group" id="bebidasGroup">
-      <label class="btn-option"><input type="checkbox" name="bebida" value="Coca-Cola 2L">Coca-Cola 2L</label>
-      <label class="btn-option"><input type="checkbox" name="bebida" value="Guaraná 1L">Guaraná 1L</label>
-      <label class="btn-option"><input type="checkbox" name="bebida" value="Suco de Laranja">Suco de Laranja</label>
-    </div>
-    <button type="button" onclick="voltarEtapa(3)">Voltar</button>
-    <button type="button" onclick="proximaEtapa(5)">Próximo</button>
-  </div>
-
-  <div id="etapa5" class="etapa section">
-    <h3>5. Endereço de Entrega</h3>
-    <input type="text" id="nome" placeholder="Seu nome" required>
-    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2" required>
-    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9" required>
-    <input type="text" id="rua" placeholder="Rua" required>
-    <input type="text" id="numero" placeholder="Número da Casa" required>
-    <input type="text" id="referencia" placeholder="Referência (opcional)">
-    <select id="entrega" required>
-      <option value="Retirada no Local|0">Retirada no Local — R$0,00</option>
-      <option value="Chico Simão|5">Chico Simão — R$5,00</option>
-      <option value="Copa X|6">Copa X — R$6,00</option>
-      <option value="Centro|5">Centro — R$5,00</option>
-      <option value="Colina Verde|6">Colina Verde — R$6,00</option>
-    </select>
-    <button type="button" onclick="voltarEtapa(4)">Voltar</button>
     <button type="submit">Finalizar Pedido</button>
   </div>
 </form>
 
 <script>
-let etapaAtual = 1;
+let etapaAtual = 2;
 function proximaEtapa(n) {
   document.getElementById("etapa" + etapaAtual).classList.remove("ativa");
   document.getElementById("etapa" + n).classList.add("ativa");
@@ -172,6 +119,33 @@ function proximaEtapa(n) {
 function voltarEtapa(n) {
   proximaEtapa(n);
 }
+
+function toggleSelect(groupSelector, type, limit = null) {
+  document.querySelectorAll(`${groupSelector} input`).forEach(el => {
+    el.addEventListener("change", () => {
+      const label = el.closest("label");
+      if (type === "radio") {
+        document.querySelectorAll(`${groupSelector} .btn-option`).forEach(l => l.classList.remove("selected"));
+        label.classList.add("selected");
+      } else if (type === "checkbox") {
+        label.classList.toggle("selected", el.checked);
+        const checked = document.querySelectorAll(`${groupSelector} input:checked`);
+        if (limit && checked.length > limit) {
+          el.checked = false;
+          label.classList.remove("selected");
+          alert(`Máximo de ${limit} opções.`);
+        }
+      }
+    });
+  });
+}
+
+// Ativa seleção com limite
+window.onload = () => {
+  toggleSelect("#saboresGroup", "checkbox", 4);
+  toggleSelect("#bordaGroup", "radio");
+  toggleSelect("#adicionaisGroup", "checkbox", 3);
+};
 </script>
 </body>
 </html>
