@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Endereço de Entrega</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #fff8f5;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      color: #ffd700;
+      text-align: center;
+    }
+    .section {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 14px;
+      font-size: 17px;
+      margin-top: 10px;
+      border-radius: 6px;
+      border: none;
+    }
+    input, select {
+      background: #1a1a1a;
+      color: #ffd700;
+      border: 1px solid #ffd700;
+    }
+    button {
+      background: #ffd700;
+      color: #000;
+      font-weight: bold;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>📍 Meu Endereço</h2>
+  <div class="section">
+    <input type="text" id="nome" placeholder="Seu nome">
+    <input type="text" id="ddd" placeholder="DDD (ex: 65)" maxlength="2">
+    <input type="text" id="celular" placeholder="Número (ex: 999999999)" maxlength="9">
+    <input type="text" id="rua" placeholder="Rua">
+    <input type="text" id="numero" placeholder="Número da Casa">
+    <input type="text" id="referencia" placeholder="Referência (opcional)">
+
+    <select id="entrega">
+      <option value="Retirada no Local|0">Retirada no Local — R$0,00</option>
+      <option value="Chico Simão|5">Chico Simão — R$5,00</option>
+      <option value="Copa X|6">Copa X — R$6,00</option>
+      <option value="Centro|5">Centro — R$5,00</option>
+      <option value="Colina Verde|6">Colina Verde — R$6,00</option>
+    </select>
+
+    <button onclick="salvarEndereco()">💾 Salvar Endereço</button>
+    <button onclick="window.location.href='index.html'">🏠 Voltar ao Início</button>
+  </div>
+
+  <script>
+    function salvarEndereco() {
+      const endereco = {
+        nome: document.getElementById('nome').value.trim(),
+        ddd: document.getElementById('ddd').value.trim(),
+        celular: document.getElementById('celular').value.trim(),
+        rua: document.getElementById('rua').value.trim(),
+        numero: document.getElementById('numero').value.trim(),
+        referencia: document.getElementById('referencia').value.trim(),
+        entrega: document.getElementById('entrega').value
+      };
+      localStorage.setItem('enderecoCliente', JSON.stringify(endereco));
+      alert('Endereço salvo com sucesso!');
+    }
+
+    // Pré-carrega se já existir
+    window.onload = () => {
+      const dados = JSON.parse(localStorage.getItem('enderecoCliente'));
+      if (dados) {
+        document.getElementById('nome').value = dados.nome || '';
+        document.getElementById('ddd').value = dados.ddd || '';
+        document.getElementById('celular').value = dados.celular || '';
+        document.getElementById('rua').value = dados.rua || '';
+        document.getElementById('numero').value = dados.numero || '';
+        document.getElementById('referencia').value = dados.referencia || '';
+        document.getElementById('entrega').value = dados.entrega || '';
+      }
+    }
+  </script>
+</body>
+</html>
