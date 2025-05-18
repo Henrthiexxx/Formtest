@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Carrinho</title>
+  <style>
+    body {
+      background: #0d0d0d;
+      color: #fff8f5;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+      color: #ffd700;
+    }
+    .pedido {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+    button {
+      background: #ffd700;
+      color: #000;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      margin: 10px 5px 0 0;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>🛒 Carrinho de Pedidos</h2>
+  <div id="listaPedidos"></div>
+  <div style="text-align:center">
+    <button onclick="enviarTodosPedidos()">📲 Enviar todos via WhatsApp</button>
+    <button onclick="limparCarrinho()">🗑️ Limpar Carrinho</button>
+  </div>
+
+<script>
+const container = document.getElementById('listaPedidos');
+const pedidos = JSON.parse(localStorage.getItem('carrinho')) || [];
+
+if (pedidos.length === 0) {
+  container.innerHTML = '<p style="text-align:center">Carrinho vazio.</p>';
+} else {
+  pedidos.forEach((pedido, i) => {
+    const div = document.createElement('div');
+    div.className = 'pedido';
+    div.innerHTML = `
+      <strong>Produto:</strong> ${pedido.produto || 'Pizza'}<br>
+      <strong>Tamanho:</strong> ${pedido.tamanho || 'N/D'}<br>
+      <strong>Sabores:</strong> ${pedido.sabores?.join(', ') || 'N/D'}<br>
+      <strong>Borda:</strong> ${pedido.borda || 'Nenhuma'}<br>
+      <strong>Adicionais:</strong> ${pedido.adicionais?.join(', ') || 'Nenhum'}<br>
+      <strong>Bebidas:</strong> ${pedido.bebidas?.join(', ') || 'Nenhuma'}<br>
+      <strong>Endereço:</strong> ${pedido.endereco || 'N/D'}<br>
+      <strong>Nome:</strong> ${pedido.nome || 'N/D'}<br>
+      <strong>Data:</strong> ${new Date(pedido.data).toLocaleString()}<br>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function limparCarrinho() {
+  if (confirm('Tem certeza que deseja limpar o carrinho?')) {
+    localStorage.removeItem('carrinho');
+    location.reload();
+  }
+}
+
+function enviarTodosPedidos() {
+  const numero = '5566996455672'; // Altere aqui seu número do WhatsApp
+  let mensagem = '*Pedidos acumulados no carrinho:*\n\n';
+  pedidos.forEach((p, i) => {
+    mensagem += `🔸 *Pedido ${i+1}*\n` +
+                `Produto: ${p.produto || 'Pizza'}\n` +
+                `Tamanho: ${p.tamanho || 'N/D'}\n` +
+                `Sabores: ${p.sabores?.join(', ') || 'N/D'}\n` +
+                `Borda: ${p.borda || 'Nenhuma'}\n` +
+                `Adicionais: ${p.adicionais?.join(', ') || 'Nenhum'}\n` +
+                `Bebidas: ${p.bebidas?.join(', ') || 'Nenhuma'}\n` +
+                `Endereço: ${p.endereco || 'N/D'}\n` +
+                `Nome: ${p.nome || 'N/D'}\n\n`;
+  });
+  const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensagem)}`;
+  window.open(url, '_blank');
+}
+</script>
+</body>
+</html>
