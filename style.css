@@ -1,25 +1,58 @@
 body {
+  font-family: Arial, sans-serif;
   background: #0d0d0d;
   color: #fff8f5;
-  font-family: Arial, sans-serif;
   padding: 20px;
+  font-size: 18px;
 }
-
 h2 {
   color: #ffd700;
+  margin-bottom: 20px;
   text-align: center;
 }
-
+h3 {
+  color: #ffd700;
+  margin-bottom: 15px;
+}
+.etapa {
+  display: none;
+}
+.etapa.ativa {
+  display: block;
+}
 .section {
   background: #1a1a1a;
   border: 1px solid #333;
-  border-radius: 10px;
   padding: 20px;
-  max-width: 500px;
-  margin: 0 auto;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
-
-input, select, button {
+.btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn-option {
+  flex: 1 1 calc(50% - 10px);
+  background: #000;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-option.selected {
+  background: #ffd700;
+  color: #000;
+  font-weight: bold;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  display: none;
+}
+select, input, button {
   width: 100%;
   padding: 14px;
   font-size: 17px;
@@ -27,17 +60,24 @@ input, select, button {
   border-radius: 6px;
   border: none;
 }
-
-input, select {
+select, input {
   background: #1a1a1a;
   color: #ffd700;
   border: 1px solid #ffd700;
 }
-
 button {
   background: #ffd700;
   color: #000;
   font-weight: bold;
-  margin-top: 20px;
+  margin-top: 15px;
   cursor: pointer;
+}
+.btn-group-bottom {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+.btn-group span {
+  font-size: 14px;
+  color: #ccc;
 }
