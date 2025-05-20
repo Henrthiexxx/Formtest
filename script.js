@@ -1,6 +1,16 @@
-let etapaAtual = 2;
+let etapaAtual = 1;
+let tamanhoPizza = '';
+let valorBase = 0;
+let limiteSabores = 4;
 
 function proximaEtapa(n) {
+  if (n > etapaAtual + 1) return;
+
+  // Atualiza valor ao entrar na etapa 3
+  if (n === 3) {
+    atualizarValorTotal();
+  }
+
   document.getElementById("etapa" + etapaAtual).classList.remove("ativa");
   document.getElementById("etapa" + n).classList.add("ativa");
   etapaAtual = n;
@@ -30,13 +40,28 @@ function toggleSelect(groupSelector, type, limit = null) {
   });
 }
 
-function verificarSabores() {
-  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
-  if (saboresSelecionados.length === 0) {
-    exibirPopup("⚠️ Você precisa escolher pelo menos 1 sabor antes de continuar.");
+function verificarTamanho() {
+  const selecionado = document.querySelector('input[name="tamanho"]:checked');
+  if (!selecionado) {
+    exibirPopup("Escolha um tamanho de pizza antes de continuar.");
     return;
   }
-  proximaEtapa(3);
+
+  tamanhoPizza = selecionado.value;
+
+  if (tamanhoPizza === "Pequena") {
+    valorBase = 30;
+    limiteSabores = 2;
+  } else if (tamanhoPizza === "Média") {
+    valorBase = 40;
+    limiteSabores = 4;
+  } else if (tamanhoPizza === "Grande") {
+    valorBase = 50;
+    limiteSabores = 4;
+  }
+
+  toggleSelect("#saboresGroup", "checkbox", limiteSabores);
+  proximaEtapa(2);
 }
 
 function verificarSabores() {
@@ -51,16 +76,36 @@ function verificarSabores() {
     return;
   }
 
+  atualizarValorTotal();
+  proximaEtapa(3);
+}
+
+function atualizarValorTotal() {
+  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
   let precoFinal = valorBase;
+
   if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
     precoFinal += 5;
   }
 
   window.precoFinalPizza = precoFinal;
-  document.getElementById("valorTotal").innerText = `Total: R$ ${precoFinal.toFixed(2)}`;
-  proximaEtapa(3);
+  const valorTotal = document.getElementById("valorTotal");
+  if (valorTotal) {
+    valorTotal.innerText = `Total: R$ ${precoFinal.toFixed(2)}`;
+  }
 }
 
+function salvarPedido() {
+  const form = document.getElementById("formPizza");
+  const dados = new FormData(form);
+
+  const sabores = dados.getAll("sabor").join(", ");
+  const borda = dados.get("borda") || "Sem borda";
+  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
+
+  const resumo = `Pedido:\n- Tamanho: ${tamanhoPizza}\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}\n- Total: R$ ${window.precoFinalPizza.toFixed(2)}`;
+  exibirPopup(resumo);
+}
 
 function clearCart() {
   const oldCart = localStorage.getItem('carrinho');
@@ -98,76 +143,7 @@ function exibirPopupConfirmacao(mensagem, callbackSim) {
 
 window.onload = () => {
   toggleSelect("#tamanhoGroup", "radio");
-  toggleSelect("#saboresGroup", "checkbox", 4);
+  toggleSelect("#saboresGroup", "checkbox", limiteSabores);
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
-let tamanhoPizza = '';
-let valorBase = 0;
-
-let tamanhoPizza = '';
-let valorBase = 0;
-let limiteSabores = 4;
-
-function verificarTamanho() {
-  const selecionado = document.querySelector('input[name="tamanho"]:checked');
-  if (!selecionado) {
-    exibirPopup("Escolha um tamanho de pizza antes de continuar.");
-    return;
-  }
-
-  tamanhoPizza = selecionado.value;
-
-  if (tamanhoPizza === "Pequena") {
-    valorBase = 30;
-    limiteSabores = 2;
-  } else if (tamanhoPizza === "Média") {
-    valorBase = 40;
-    limiteSabores = 4;
-  } else if (tamanhoPizza === "Grande") {
-    valorBase = 50;
-    limiteSabores = 4;
-  }
-
-  toggleSelect("#saboresGroup", "checkbox", limiteSabores); // atualiza limite dinâmico
-  proximaEtapa(2);
-}
-
-
-function verificarSabores() {
-  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
-  if (saboresSelecionados.length === 0) {
-    exibirPopup("⚠️ Você precisa escolher pelo menos 1 sabor.");
-    return;
-  }
-
-  atualizarValorTotal();
-
-  }
-
-  window.precoFinalPizza = precoFinal;
-  proximaEtapa(3);
-}
-
-function salvarPedido() {
-  const form = document.getElementById("formPizza");
-  const dados = new FormData(form);
-
-  const sabores = dados.getAll("sabor").join(", ");
-  const borda = dados.get("borda") || "Sem borda";
-  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
-
-  const resumo = `Pedido:\n- Tamanho: ${tamanhoPizza}\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}\n- Total: R$ ${window.precoFinalPizza.toFixed(2)}`;
-  exibirPopup(resumo);
-}
-function atualizarValorTotal() {
-  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
-  let precoFinal = valorBase;
-
-  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
-    precoFinal += 5;
-  }
-
-  window.precoFinalPizza = precoFinal;
-  document.getElementById("valorTotal").innerText = `Total: R$ ${precoFinal.toFixed(2)}`;
-}
