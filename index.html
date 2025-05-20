@@ -8,7 +8,7 @@
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
 
-<form onsubmit="salvarPedido(); return false;">
+<form id="formPizza" onsubmit="salvarPedido(); return false;">
   <div id="etapa2" class="etapa ativa section">
     <h3>1. Escolha até 4 Sabores</h3>
     <div class="btn-group" id="saboresGroup">
@@ -18,7 +18,7 @@
       <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"><strong>Doce Tentação</strong><br><span>Chocolate ao leite com morango e granulado.</span></label>
       <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"><strong>Quatro Delícias</strong><br><span>Mussarela, cheddar, gorgonzola e parmesão.</span></label>
     </div>
-    <button type="button" onclick="proximaEtapa(3)">Próximo</button>
+    <button type="button" onclick="verificarSabores()">Próximo</button>
   </div>
 
   <div id="etapa3" class="etapa section">
@@ -48,14 +48,17 @@
 
 <script>
 let etapaAtual = 2;
+
 function proximaEtapa(n) {
   document.getElementById("etapa" + etapaAtual).classList.remove("ativa");
   document.getElementById("etapa" + n).classList.add("ativa");
   etapaAtual = n;
 }
+
 function voltarEtapa(n) {
   proximaEtapa(n);
 }
+
 function toggleSelect(groupSelector, type, limit = null) {
   document.querySelectorAll(`${groupSelector} input`).forEach(el => {
     el.addEventListener("change", () => {
@@ -75,6 +78,28 @@ function toggleSelect(groupSelector, type, limit = null) {
     });
   });
 }
+
+function verificarSabores() {
+  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
+  if (saboresSelecionados.length === 0) {
+    alert("Selecione pelo menos 1 sabor.");
+    return;
+  }
+  proximaEtapa(3);
+}
+
+function salvarPedido() {
+  const form = document.getElementById("formPizza");
+  const dados = new FormData(form);
+
+  const sabores = dados.getAll("sabor").join(", ");
+  const borda = dados.get("borda") || "Sem borda";
+  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
+
+  const resumo = `Pedido:\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}`;
+  alert(resumo);
+}
+
 window.onload = () => {
   toggleSelect("#saboresGroup", "checkbox", 4);
   toggleSelect("#bordaGroup", "radio");
