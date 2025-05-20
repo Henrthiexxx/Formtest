@@ -86,6 +86,7 @@ function exibirPopupConfirmacao(mensagem, callbackSim) {
 }
 
 window.onload = () => {
+  toggleSelect("#tamanhoGroup", "radio");
   toggleSelect("#saboresGroup", "checkbox", 4);
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
