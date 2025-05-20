@@ -23,7 +23,7 @@ function toggleSelect(groupSelector, type, limit = null) {
         if (limit && checked.length > limit) {
           el.checked = false;
           label.classList.remove("selected");
-          alert(`Máximo de ${limit} opções.`);
+          exibirPopup(`Máximo de ${limit} opções.`);
         }
       }
     });
@@ -33,7 +33,7 @@ function toggleSelect(groupSelector, type, limit = null) {
 function verificarSabores() {
   const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
   if (saboresSelecionados.length === 0) {
-    confirm("⚠️ Você precisa escolher pelo menos 1 sabor antes de continuar.");
+    exibirPopup("⚠️ Você precisa escolher pelo menos 1 sabor antes de continuar.");
     return;
   }
   proximaEtapa(3);
@@ -48,7 +48,41 @@ function salvarPedido() {
   const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
 
   const resumo = `Pedido:\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}`;
-  alert(resumo);
+  exibirPopup(resumo);
+}
+
+function clearCart() {
+  const oldCart = localStorage.getItem('carrinho');
+  if (oldCart) {
+    exibirPopupConfirmacao("Deseja limpar todos os itens do carrinho?", () => {
+      localStorage.setItem('historico', oldCart);
+      localStorage.removeItem('carrinho');
+      location.reload();
+    });
+  }
+}
+
+function exibirPopup(mensagem) {
+  document.getElementById("popupMessage").innerText = mensagem;
+  document.getElementById("customPopup").classList.remove("hidden");
+}
+
+function fecharPopup() {
+  document.getElementById("customPopup").classList.add("hidden");
+}
+
+function exibirPopupConfirmacao(mensagem, callbackSim) {
+  const popup = document.getElementById("customPopup");
+  const mensagemEl = document.getElementById("popupMessage");
+  const botoes = document.createElement("div");
+
+  mensagemEl.innerText = mensagem;
+  botoes.innerHTML = `
+    <button onclick="fecharPopup();">Cancelar</button>
+    <button onclick="fecharPopup(); (${callbackSim.toString()})();">OK</button>
+  `;
+  mensagemEl.appendChild(botoes);
+  popup.classList.remove("hidden");
 }
 
 window.onload = () => {
@@ -56,11 +90,3 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
-function clearCart() {
-  const oldCart = localStorage.getItem('carrinho');
-  if (oldCart && confirm('Clear all items from the cart?')) {
-    localStorage.setItem('historico', oldCart);
-    localStorage.removeItem('carrinho');
-    location.reload();
-  }
-}
