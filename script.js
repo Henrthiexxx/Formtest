@@ -141,9 +141,8 @@ function verificarSabores() {
     return;
   }
 
-  let precoFinal = valorBase;
-  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
-    precoFinal += 5;
+  atualizarValorTotal();
+
   }
 
   window.precoFinalPizza = precoFinal;
@@ -160,4 +159,15 @@ function salvarPedido() {
 
   const resumo = `Pedido:\n- Tamanho: ${tamanhoPizza}\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}\n- Total: R$ ${window.precoFinalPizza.toFixed(2)}`;
   exibirPopup(resumo);
+}
+function atualizarValorTotal() {
+  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
+  let precoFinal = valorBase;
+
+  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
+    precoFinal += 5;
+  }
+
+  window.precoFinalPizza = precoFinal;
+  document.getElementById("valorTotal").innerText = `Total: R$ ${precoFinal.toFixed(2)}`;
 }
