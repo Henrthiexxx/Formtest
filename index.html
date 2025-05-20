@@ -3,77 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Monte sua Pizza Grande</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0d0d0d;
-      color: #fff8f5;
-      padding: 20px;
-      font-size: 18px;
-    }
-    h2 {
-      color: #ffd700;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    .etapa {
-      display: none;
-    }
-    .etapa.ativa {
-      display: block;
-    }
-    .section {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-    .btn-option {
-      flex: 1 1 calc(50% - 10px);
-      background: #000;
-      color: #ffd700;
-      border: 2px solid #ffd700;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: left;
-      cursor: pointer;
-      user-select: none;
-    }
-    .btn-option.selected {
-      background: #ffd700;
-      color: #000;
-      font-weight: bold;
-    }
-    input[type="checkbox"], input[type="radio"] {
-      display: none;
-    }
-    select, input, button {
-      width: 100%;
-      padding: 14px;
-      font-size: 17px;
-      margin-top: 10px;
-      border-radius: 6px;
-      border: none;
-    }
-    select, input {
-      background: #1a1a1a;
-      color: #ffd700;
-      border: 1px solid #ffd700;
-    }
-    button {
-      background: #ffd700;
-      color: #000;
-      font-weight: bold;
-      margin-top: 15px;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
@@ -82,11 +12,11 @@
   <div id="etapa2" class="etapa ativa section">
     <h3>1. Escolha até 4 Sabores</h3>
     <div class="btn-group" id="saboresGroup">
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"><strong>Sabores do Campo</strong><br><span style="font-size:14px;color:#ccc">Milho, ervilha, mussarela e toque de alho.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"><strong>Carnuda Suprema</strong><br><span style="font-size:14px;color:#ccc">Calabresa, bacon, presunto e queijo fundido.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"><strong>Verde Leve</strong><br><span style="font-size:14px;color:#ccc">Brócolis, palmito, requeijão e cebola roxa.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"><strong>Doce Tentação</strong><br><span style="font-size:14px;color:#ccc">Chocolate ao leite com morango e granulado.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"><strong>Quatro Delícias</strong><br><span style="font-size:14px;color:#ccc">Mussarela, cheddar, gorgonzola e parmesão.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"><strong>Sabores do Campo</strong><br><span>Milho, ervilha, mussarela e toque de alho.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"><strong>Carnuda Suprema</strong><br><span>Calabresa, bacon, presunto e queijo fundido.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"><strong>Verde Leve</strong><br><span>Brócolis, palmito, requeijão e cebola roxa.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"><strong>Doce Tentação</strong><br><span>Chocolate ao leite com morango e granulado.</span></label>
+      <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"><strong>Quatro Delícias</strong><br><span>Mussarela, cheddar, gorgonzola e parmesão.</span></label>
     </div>
     <button type="button" onclick="proximaEtapa(3)">Próximo</button>
   </div>
@@ -98,7 +28,7 @@
       <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
       <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
     </div>
-    <h3 style="margin-top: 30px;">Adicionais (máx. 3)</h3>
+    <h3>Adicionais (máx. 3)</h3>
     <div class="btn-group" id="adicionaisGroup">
       <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
       <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
@@ -107,33 +37,14 @@
     <button type="button" onclick="voltarEtapa(2)">Voltar</button>
     <button type="submit">Finalizar Pedido</button>
   </div>
-  <div style="display: flex; gap: 10px; margin-top: 20px;">
-    <!-- Botão Finalizar Pedido (já funcional) -->
+
+  <div class="btn-group-bottom">
     <button type="submit">Finalizar Pedido</button>
-
-    <!-- Botão 1 - Exemplo de outro link -->
-    <button type="button" onclick="window.location.href='https://henrthiexxx.github.io/Formtest/carrinho.html'">
-      Outro Botão 1
-    </button>
-
-    <!-- Botão 2 - Exemplo de ação customizada -->
-    <button type="button" onclick="alert('Ação personalizada aqui');">
-      Outro Botão 2
-    </button>
-
-    <!-- Botão 3 - Voltar à página inicial -->
-    <button type="button" onclick="window.location.href='index.html'">
-      Página Inicial
-    </button>
+    <button type="button" onclick="window.location.href='https://henrthiexxx.github.io/Formtest/carrinho.html'">Outro Botão 1</button>
+    <button type="button" onclick="alert('Ação personalizada aqui');">Outro Botão 2</button>
+    <button type="button" onclick="window.location.href='index.html'">Página Inicial</button>
   </div>
 </form>
-
-<!--
-  🔧 GUIA DE EDIÇÃO DOS BOTÕES:
-  - Para alterar o TEXTO do botão, mude o conteúdo entre <button> e </button>
-  - Para alterar o LINK, edite o valor de window.location.href='SEULINK'
-  - Para ações JavaScript, edite o conteúdo da função onclick="..."
--->
 
 <script>
 let etapaAtual = 2;
@@ -145,7 +56,6 @@ function proximaEtapa(n) {
 function voltarEtapa(n) {
   proximaEtapa(n);
 }
-
 function toggleSelect(groupSelector, type, limit = null) {
   document.querySelectorAll(`${groupSelector} input`).forEach(el => {
     el.addEventListener("change", () => {
@@ -165,8 +75,6 @@ function toggleSelect(groupSelector, type, limit = null) {
     });
   });
 }
-
-// Ativa seleção com limite
 window.onload = () => {
   toggleSelect("#saboresGroup", "checkbox", 4);
   toggleSelect("#bordaGroup", "radio");
