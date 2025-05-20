@@ -39,17 +39,28 @@ function verificarSabores() {
   proximaEtapa(3);
 }
 
-function salvarPedido() {
-  const form = document.getElementById("formPizza");
-  const dados = new FormData(form);
+function verificarSabores() {
+  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
+  if (saboresSelecionados.length === 0) {
+    exibirPopup("⚠️ Você precisa escolher pelo menos 1 sabor.");
+    return;
+  }
 
-  const sabores = dados.getAll("sabor").join(", ");
-  const borda = dados.get("borda") || "Sem borda";
-  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
+  if (saboresSelecionados.length > limiteSabores) {
+    exibirPopup(`Máximo de ${limiteSabores} sabores para a pizza ${tamanhoPizza}.`);
+    return;
+  }
 
-  const resumo = `Pedido:\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}`;
-  exibirPopup(resumo);
+  let precoFinal = valorBase;
+  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
+    precoFinal += 5;
+  }
+
+  window.precoFinalPizza = precoFinal;
+  document.getElementById("valorTotal").innerText = `Total: R$ ${precoFinal.toFixed(2)}`;
+  proximaEtapa(3);
 }
+
 
 function clearCart() {
   const oldCart = localStorage.getItem('carrinho');
