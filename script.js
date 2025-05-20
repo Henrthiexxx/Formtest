@@ -56,3 +56,11 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
+function clearCart() {
+  const oldCart = localStorage.getItem('carrinho');
+  if (oldCart && confirm('Clear all items from the cart?')) {
+    localStorage.setItem('historico', oldCart);
+    localStorage.removeItem('carrinho');
+    location.reload();
+  }
+}
