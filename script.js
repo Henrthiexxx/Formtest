@@ -90,3 +90,47 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
+let tamanhoPizza = '';
+let valorBase = 0;
+
+function verificarTamanho() {
+  const selecionado = document.querySelector('input[name="tamanho"]:checked');
+  if (!selecionado) {
+    exibirPopup("Escolha um tamanho de pizza antes de continuar.");
+    return;
+  }
+  tamanhoPizza = selecionado.value;
+  if (tamanhoPizza === "Pequena") valorBase = 30;
+  else if (tamanhoPizza === "Média") valorBase = 40;
+  else if (tamanhoPizza === "Grande") valorBase = 50;
+
+  proximaEtapa(2);
+}
+
+function verificarSabores() {
+  const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
+  if (saboresSelecionados.length === 0) {
+    exibirPopup("⚠️ Você precisa escolher pelo menos 1 sabor.");
+    return;
+  }
+
+  let precoFinal = valorBase;
+  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
+    precoFinal += 5;
+  }
+
+  window.precoFinalPizza = precoFinal;
+  proximaEtapa(3);
+}
+
+function salvarPedido() {
+  const form = document.getElementById("formPizza");
+  const dados = new FormData(form);
+
+  const sabores = dados.getAll("sabor").join(", ");
+  const borda = dados.get("borda") || "Sem borda";
+  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
+
+  const resumo = `Pedido:\n- Tamanho: ${tamanhoPizza}\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}\n- Total: R$ ${window.precoFinalPizza.toFixed(2)}`;
+  exibirPopup(resumo);
+}
