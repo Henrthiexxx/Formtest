@@ -7,8 +7,17 @@
 </head>
 <body>
 <h2>🍕 Monte sua Pizza Grande</h2>
-
 <form id="formPizza" onsubmit="salvarPedido(); return false;">
+  <div id="etapa1" class="etapa ativa section">
+  <h3>1. Escolha o Tamanho da Pizza</h3>
+  <div class="btn-group" id="tamanhoGroup">
+    <label class="btn-option"><input type="radio" name="tamanho" value="Pequena">Pequena - R$ 30,00</label>
+    <label class="btn-option"><input type="radio" name="tamanho" value="Média">Média - R$ 40,00</label>
+    <label class="btn-option"><input type="radio" name="tamanho" value="Grande">Grande - R$ 50,00</label>
+  </div>
+  <button type="button" onclick="verificarTamanho()">Próximo</button>
+</div>
+
   <div id="etapa2" class="etapa ativa section">
     <h3>1. Escolha até 4 Sabores</h3>
     <div class="btn-group" id="saboresGroup">
