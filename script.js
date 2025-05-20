@@ -94,19 +94,34 @@ window.onload = () => {
 let tamanhoPizza = '';
 let valorBase = 0;
 
+let tamanhoPizza = '';
+let valorBase = 0;
+let limiteSabores = 4;
+
 function verificarTamanho() {
   const selecionado = document.querySelector('input[name="tamanho"]:checked');
   if (!selecionado) {
     exibirPopup("Escolha um tamanho de pizza antes de continuar.");
     return;
   }
-  tamanhoPizza = selecionado.value;
-  if (tamanhoPizza === "Pequena") valorBase = 30;
-  else if (tamanhoPizza === "Média") valorBase = 40;
-  else if (tamanhoPizza === "Grande") valorBase = 50;
 
+  tamanhoPizza = selecionado.value;
+
+  if (tamanhoPizza === "Pequena") {
+    valorBase = 30;
+    limiteSabores = 2;
+  } else if (tamanhoPizza === "Média") {
+    valorBase = 40;
+    limiteSabores = 4;
+  } else if (tamanhoPizza === "Grande") {
+    valorBase = 50;
+    limiteSabores = 4;
+  }
+
+  toggleSelect("#saboresGroup", "checkbox", limiteSabores); // atualiza limite dinâmico
   proximaEtapa(2);
 }
+
 
 function verificarSabores() {
   const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
