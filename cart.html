@@ -1,147 +1,35 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Carrinho de Pizza</title>
-  <link rel="stylesheet" href="https://henrthiexxx.github.io/Formtest/style.css">
+  <link rel="stylesheet" href="styles.css"/>
   <style>
-    .cart {
-      max-width: 500px;
-      margin: auto;
-      background: #1a1a1a;
-      padding: 20px;
-      border-radius: 10px;
-      color: #fff;
-    }
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #444;
-      padding: 10px 0;
-    }
-    .item-info {
-      flex: 1;
-      margin-left: 10px;
-    }
-    .cart-summary,
-    .cart-actions {
-      text-align: center;
-      margin-top: 20px;
-    }
-    .remove-btn {
-      background: #ff4d4d;
-      color: white;
-      border: none;
-      font-size: 20px;
-      cursor: pointer;
-      border-radius: 5px;
-      padding: 5px 10px;
-    }
-    .btn {
-      background: #ffd700;
-      border: none;
-      padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+    .cart { max-width: 500px; margin: auto; padding: 20px; background: #1a1a1a; color: #fff; border-radius: 10px; }
+    .cart-item { display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #444; padding: 10px 0; }
+    .item-info { flex: 1; margin-left: 10px; }
+    .cart-summary, .cart-actions { text-align: center; margin-top: 20px; }
+    .remove-btn { background: #ff4d4d; color: white; border: none; font-size: 20px; cursor: pointer; border-radius: 5px; padding: 5px 10px; }
+    .btn { background: #ffd700; border: none; padding: 10px; margin: 5px; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
   <aside class="cart">
     <h2>Seu Carrinho</h2>
-    <div class="cart-items" id="cartList"></div>
-    <div class="cart-summary" id="totalValue">
-      Total: R$ 0,00
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-summary">
+      <span>Total:</span>
+      <span id="cartTotal">R$ 0,00</span>
     </div>
     <div class="cart-actions">
-      <button class="btn" onclick="sendToWhatsApp()">📲 Enviar via WhatsApp</button>
-      <button class="btn" onclick="clearCart()">🗑️ Limpar Carrinho</button>
-      <button class="btn" onclick="window.location.href='index.html'">🏠 Início</button>
+      <button class="btn" onclick="fechar()">Fechar</button>
+      <button class="btn" onclick="limparCarrinho()">Limpar Carrinho</button>
+      <button class="btn" onclick="finalizarCompra()">Finalizar Compra</button>
     </div>
   </aside>
 
-  <script>
-    const cartContainer = document.getElementById('cartList');
-    const totalValue = document.getElementById('totalValue');
-    let total = 0;
-
-    const cart = JSON.parse(localStorage.getItem('carrinho')) || [];
-
-    if (cart.length === 0) {
-      cartContainer.innerHTML = '<p style="text-align:center">Seu carrinho está vazio.</p>';
-    } else {
-      cart.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'cart-item';
-
-        const img = document.createElement('img');
-        img.src = 'https://via.placeholder.com/60';
-        img.alt = item.produto || 'Pizza';
-
-        const info = document.createElement('div');
-        info.className = 'item-info';
-        info.innerHTML = `
-          <p class="item-name">${item.produto || 'Pizza'}</p>
-          <p class="item-qty">${item.tamanho || 'Tamanho único'}</p>
-          <p>${item.sabores?.join(', ') || ''}</p>
-          <p>${item.adicionais?.join(', ') || ''}</p>
-          <p>${item.bebidas?.join(', ') || ''}</p>
-          <p>${item.nome || ''}</p>
-          <p>${item.endereco || ''}</p>
-        `;
-
-        const price = document.createElement('p');
-        const itemPrice = parseFloat(item.preco || 0);
-        price.className = 'item-price';
-        price.textContent = `R$ ${itemPrice.toFixed(2)}`;
-        total += itemPrice;
-
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'remove-btn';
-        removeBtn.innerHTML = '&times;';
-        removeBtn.onclick = () => {
-          cart.splice(index, 1);
-          localStorage.setItem('carrinho', JSON.stringify(cart));
-          location.reload();
-        };
-
-        div.appendChild(img);
-        div.appendChild(info);
-        div.appendChild(price);
-        div.appendChild(removeBtn);
-        cartContainer.appendChild(div);
-      });
-
-      totalValue.textContent = `Total: R$ ${total.toFixed(2)}`;
-    }
-
-    function clearCart() {
-      if (confirm('Limpar todos os itens do carrinho?')) {
-        localStorage.removeItem('carrinho');
-        location.reload();
-      }
-    }
-
-    function sendToWhatsApp() {
-      const number = '5566996455672';
-      let message = '*🛒 Pedido:*\n\n';
-      cart.forEach((item, i) => {
-        message += `🔹 *Item ${i + 1}*\n` +
-          `Produto: ${item.produto || 'Pizza'}\n` +
-          `Tamanho: ${item.tamanho || 'N/A'}\n` +
-          `Sabores: ${item.sabores?.join(', ') || 'N/A'}\n` +
-          `Borda: ${item.borda || 'Nenhuma'}\n` +
-          `Adicionais: ${item.adicionais?.join(', ') || 'Nenhum'}\n` +
-          `Bebidas: ${item.bebidas?.join(', ') || 'Nenhuma'}\n` +
-          `Nome: ${item.nome || 'N/A'}\n` +
-          `Endereço: ${item.endereco || 'N/A'}\n\n`;
-      });
-      const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-      window.open(url, '_blank');
-    }
-  </script>
+  <script src="scripts.js"></script> <!-- Seu script original -->
+  <script src="cart.js"></script> <!-- Novo script do carrinho -->
 </body>
 </html>
