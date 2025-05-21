@@ -84,9 +84,18 @@ function atualizarValorTotal() {
   const saboresSelecionados = document.querySelectorAll('#saboresGroup input:checked');
   let precoFinal = valorBase;
 
-  if ((tamanhoPizza === "Média" || tamanhoPizza === "Grande") && saboresSelecionados.length === 2) {
-    precoFinal += 5;
+  const bordaSelecionada = document.querySelector('input[name="borda"]:checked');
+  if (bordaSelecionada && bordaSelecionada.value) {
+    precoFinal += 10;
   }
+
+  const adicionaisSelecionados = document.querySelectorAll('input[name="adicional"]:checked');
+  precoFinal += adicionaisSelecionados.length * 1;
+
+  // Quantidade, se existir
+  const qtdEl = document.getElementById("qtdPizza");
+  const qtd = qtdEl ? parseInt(qtdEl.innerText) : 1;
+  precoFinal *= qtd;
 
   window.precoFinalPizza = precoFinal;
   const valorTotal = document.getElementById("valorTotal");
@@ -104,12 +113,16 @@ function salvarPedido() {
   const adicionais = dados.getAll("adicional");
   const tamanho = tamanhoPizza || dados.get("tamanho");
 
+  const qtdEl = document.getElementById("qtdPizza");
+  const quantidade = qtdEl ? parseInt(qtdEl.innerText) : 1;
+
   const item = {
     produto: "Pizza",
     tamanho,
     sabores,
     borda,
     adicionais,
+    quantidade,
     preco: window.precoFinalPizza || 0,
     data: new Date().toISOString()
   };
