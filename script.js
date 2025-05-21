@@ -99,12 +99,26 @@ function salvarPedido() {
   const form = document.getElementById("formPizza");
   const dados = new FormData(form);
 
-  const sabores = dados.getAll("sabor").join(", ");
+  const sabores = dados.getAll("sabor");
   const borda = dados.get("borda") || "Sem borda";
-  const adicionais = dados.getAll("adicional").join(", ") || "Sem adicionais";
+  const adicionais = dados.getAll("adicional");
+  const tamanho = tamanhoPizza || dados.get("tamanho");
 
-  const resumo = `Pedido:\n- Tamanho: ${tamanhoPizza}\n- Sabores: ${sabores}\n- Borda: ${borda}\n- Adicionais: ${adicionais}\n- Total: R$ ${window.precoFinalPizza.toFixed(2)}`;
-  exibirPopup(resumo);
+  const item = {
+    produto: "Pizza",
+    tamanho,
+    sabores,
+    borda,
+    adicionais,
+    preco: window.precoFinalPizza || 0,
+    data: new Date().toISOString()
+  };
+
+  const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+  carrinho.push(item);
+  localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+  exibirPopup("✅ Pedido adicionado ao carrinho!");
 }
 
 function clearCart() {
