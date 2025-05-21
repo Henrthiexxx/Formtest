@@ -7,8 +7,19 @@
   <style>
     .btn-group-bottom {
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-end;
+      gap: 10px;
       margin-top: 30px;
+      padding-right: 20px;
+    }
+    .btn-group-bottom button {
+      font-size: 13px;
+      padding: 6px 12px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
     .qtd-controls {
       display: flex;
@@ -18,7 +29,16 @@
     }
     .qtd-controls button {
       padding: 5px 10px;
-      font-size: 20px;
+      font-size: 18px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .qtd-controls span {
+      font-weight: bold;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -37,16 +57,14 @@
   </div>
 
   <form id="formPizza" onsubmit="adicionarAoCarrinho(); return false;">
-    <div id="etapa1" class="etapa ativa section">
+    <div class="section">
       <h3>1. Escolha o Tamanho da Pizza</h3>
       <div class="btn-group" id="tamanhoGroup">
         <label class="btn-option"><input type="radio" name="tamanho" value="Pequena">Pequena - R$ 30,00</label>
         <label class="btn-option"><input type="radio" name="tamanho" value="Média">Média - R$ 40,00</label>
         <label class="btn-option"><input type="radio" name="tamanho" value="Grande">Grande - R$ 50,00</label>
       </div>
-    </div>
 
-    <div id="etapa2" class="etapa section">
       <h3>2. Escolha até 4 Sabores</h3>
       <div class="btn-group" id="saboresGroup">
         <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"> Sabores do Campo</label>
@@ -55,9 +73,7 @@
         <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"> Doce Tentação</label>
         <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"> Quatro Delícias</label>
       </div>
-    </div>
 
-    <div id="etapa3" class="etapa section">
       <h3>3. Escolha a Borda (R$ 10,00)</h3>
       <div class="btn-group" id="bordaGroup">
         <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
