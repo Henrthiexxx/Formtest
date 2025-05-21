@@ -4,67 +4,139 @@
   <meta charset="UTF-8">
   <title>Monte sua Pizza Grande</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .btn-group-bottom {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 30px;
+    }
+    .qtd-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .qtd-controls button {
+      padding: 5px 10px;
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
   <div id="valorTotal" style="position: absolute; top: 20px; right: 20px; background: #1a1a1a; color: #ffd700; padding: 10px 20px; border: 2px solid #ffd700; border-radius: 10px; font-weight: bold; z-index: 999;">
-  Total: R$ 0,00
-</div>
-<h2>🍕 Monte sua Pizza Grande</h2>
-<form id="formPizza" onsubmit="salvarPedido(); return false;">
-  <div id="etapa1" class="etapa ativa section">
-  <h3>1. Escolha o Tamanho da Pizza</h3>
-  <div class="btn-group" id="tamanhoGroup">
-    <label class="btn-option"><input type="radio" name="tamanho" value="Pequena">Pequena - R$ 30,00</label>
-    <label class="btn-option"><input type="radio" name="tamanho" value="Média">Média - R$ 40,00</label>
-    <label class="btn-option"><input type="radio" name="tamanho" value="Grande">Grande - R$ 50,00</label>
+    Total: R$ 0,00
   </div>
-  <button type="button" onclick="verificarTamanho()">Próximo</button>
-</div>
 
-  <div id="etapa2" class="etapa section">
-    <h3>1. Escolha até 4 Sabores</h3>
-    <div class="btn-group" id="saboresGroup">
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"><strong>Sabores do Campo</strong><br><span>Milho, ervilha, mussarela e toque de alho.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"><strong>Carnuda Suprema</strong><br><span>Calabresa, bacon, presunto e queijo fundido.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"><strong>Verde Leve</strong><br><span>Brócolis, palmito, requeijão e cebola roxa.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"><strong>Doce Tentação</strong><br><span>Chocolate ao leite com morango e granulado.</span></label>
-      <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"><strong>Quatro Delícias</strong><br><span>Mussarela, cheddar, gorgonzola e parmesão.</span></label>
+  <h2>🍕 Monte sua Pizza Grande</h2>
+
+  <div class="qtd-controls">
+    <label>Quantidade:</label>
+    <button type="button" onclick="alterarQuantidade(-1)">-</button>
+    <span id="qtdPizza">1</span>
+    <button type="button" onclick="alterarQuantidade(1)">+</button>
+  </div>
+
+  <form id="formPizza" onsubmit="adicionarAoCarrinho(); return false;">
+    <div id="etapa1" class="etapa ativa section">
+      <h3>1. Escolha o Tamanho da Pizza</h3>
+      <div class="btn-group" id="tamanhoGroup">
+        <label class="btn-option"><input type="radio" name="tamanho" value="Pequena">Pequena - R$ 30,00</label>
+        <label class="btn-option"><input type="radio" name="tamanho" value="Média">Média - R$ 40,00</label>
+        <label class="btn-option"><input type="radio" name="tamanho" value="Grande">Grande - R$ 50,00</label>
+      </div>
     </div>
-    <button type="button" onclick="verificarSabores()">Próximo</button>
-  </div>
 
-  <div id="etapa3" class="etapa section">
-    <h3>2. Escolha a Borda</h3>
-    <div class="btn-group" id="bordaGroup">
-      <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
-      <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
-      <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
+    <div id="etapa2" class="etapa section">
+      <h3>2. Escolha até 4 Sabores</h3>
+      <div class="btn-group" id="saboresGroup">
+        <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"> Sabores do Campo</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"> Carnuda Suprema</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"> Verde Leve</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"> Doce Tentação</label>
+        <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"> Quatro Delícias</label>
+      </div>
     </div>
-    <h3>Adicionais (máx. 3)</h3>
-    <div class="btn-group" id="adicionaisGroup">
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
-      <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
+
+    <div id="etapa3" class="etapa section">
+      <h3>3. Escolha a Borda (R$ 10,00)</h3>
+      <div class="btn-group" id="bordaGroup">
+        <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
+        <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
+        <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
+      </div>
+
+      <h3>Adicionais (R$ 1,00 cada, máx. 3)</h3>
+      <div class="btn-group" id="adicionaisGroup">
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
+        <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
+      </div>
     </div>
-    <button type="button" onclick="voltarEtapa(2)">Voltar</button>
-    <button type="submit">Finalizar Pedido</button>
-  </div>
 
-  <div class="btn-group-bottom">
-    <button type="submit">Finalizar Pedido</button>
-    <button type="button" onclick="window.location.href='https://henrthiexxx.github.io/Formtest/carrinho.html'">Outro Botão 1</button>
-    <button type="button" onclick="alert('Ação personalizada aqui');">Outro Botão 2</button>
-    <button type="button" onclick="window.location.href='index.html'">Página Inicial</button>
-  </div>
-</form>
+    <div class="btn-group-bottom">
+      <button type="button" onclick="window.location.href='index.html'">Voltar</button>
+      <button type="submit">Adicionar ao Carrinho</button>
+      <button type="button" onclick="window.location.href='carrinho.html'">Carrinho</button>
+      <button type="button" onclick="window.location.href='delivery.html'">Próximo</button>
+    </div>
+  </form>
 
-<script src="script.js"></script>
-<div id="customPopup" class="popup hidden">
-  <div class="popup-content">
-    <p id="popupMessage"></p>
-    <button onclick="fecharPopup()">OK</button>
-  </div>
-</div>
+  <script>
+    let quantidade = 1;
+    let valorBase = 0;
 
+    function alterarQuantidade(delta) {
+      quantidade = Math.min(6, Math.max(1, quantidade + delta));
+      document.getElementById("qtdPizza").innerText = quantidade;
+      atualizarValorTotal();
+    }
+
+    function atualizarValorTotal() {
+      const tamanho = document.querySelector('input[name="tamanho"]:checked');
+      if (!tamanho) return;
+
+      if (tamanho.value === "Pequena") valorBase = 30;
+      else if (tamanho.value === "Média") valorBase = 40;
+      else valorBase = 50;
+
+      let preco = valorBase;
+
+      const borda = document.querySelector('input[name="borda"]:checked');
+      if (borda && borda.value) preco += 10;
+
+      const adicionais = document.querySelectorAll('input[name="adicional"]:checked');
+      preco += adicionais.length * 1;
+
+      const total = preco * quantidade;
+      document.getElementById("valorTotal").innerText = `Total: R$ ${total.toFixed(2)}`;
+      return total;
+    }
+
+    function adicionarAoCarrinho() {
+      const form = document.getElementById("formPizza");
+      const dados = new FormData(form);
+
+      const item = {
+        produto: "Pizza",
+        tamanho: dados.get("tamanho") || "Grande",
+        sabores: dados.getAll("sabor"),
+        borda: dados.get("borda") || "Nenhuma",
+        adicionais: dados.getAll("adicional"),
+        preco: atualizarValorTotal(),
+        quantidade: quantidade,
+        data: new Date().toISOString()
+      };
+
+      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      carrinho.push(item);
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+
+      alert("🍕 Pedido adicionado ao carrinho!");
+    }
+
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('change', atualizarValorTotal);
+    });
+  </script>
 </body>
 </html>
