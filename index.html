@@ -7,18 +7,47 @@
   <style>
     .btn-group-bottom {
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-end;
+      gap: 10px;
       margin-top: 30px;
+      padding-right: 20px;
     }
+
+    .btn-group-bottom button {
+      font-size: 13px;
+      padding: 6px 12px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-group-bottom button:hover {
+      background: #666;
+    }
+
     .qtd-controls {
       display: flex;
       align-items: center;
       gap: 10px;
       margin: 10px 0;
     }
+
     .qtd-controls button {
       padding: 5px 10px;
-      font-size: 20px;
+      font-size: 18px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .qtd-controls span {
+      font-weight: bold;
+      font-size: 16px;
     }
   </style>
 </head>
