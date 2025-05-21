@@ -174,3 +174,6 @@ window.onload = () => {
   toggleSelect("#bordaGroup", "radio");
   toggleSelect("#adicionaisGroup", "checkbox", 3);
 };
+document.querySelectorAll('input').forEach(input => {
+  input.addEventListener('change', atualizarValorTotal);
+});
