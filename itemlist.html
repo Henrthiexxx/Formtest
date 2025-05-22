@@ -89,6 +89,11 @@
       carrinho.splice(i, 1);
       atualizarCarrinho();
     }
+    function limparCarrinho() {
+  carrinho = [];
+  atualizarCarrinho();
+}
   </script>
+  <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
 </body>
 </html>
