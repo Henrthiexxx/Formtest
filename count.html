@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contador de Tokens</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f0f0f0; }
+    textarea { width: 100%; height: 200px; padding: 10px; font-size: 14px; }
+    #resultado { margin-top: 10px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>🔢 Estimador de Tokens</h2>
+  <p>Cole qualquer texto abaixo para estimar quantos tokens ele consome (baseado em média do GPT-4).</p>
+  <textarea id="texto" placeholder="Cole seu texto aqui..."></textarea>
+  <div id="resultado"></div>
+
+  <script>
+    function estimarTokens(texto) {
+      // Aproximadamente 1 token ≈ 4 caracteres em português
+      const caracteres = texto.length;
+      const palavras = texto.trim().split(/\s+/).length;
+      const tokensEstimados = Math.round(caracteres / 4.2); // Média para pt-BR
+
+      return {
+        caracteres,
+        palavras,
+        tokens: tokensEstimados
+      };
+    }
+
+    document.getElementById('texto').addEventListener('input', function () {
+      const texto = this.value;
+      const { caracteres, palavras, tokens } = estimarTokens(texto);
+      document.getElementById('resultado').innerText =
+        `📄 Caracteres: ${caracteres} | 📝 Palavras: ${palavras} | 🔢 Tokens (estimado): ${tokens}`;
+    });
+  </script>
+</body>
+</html>
