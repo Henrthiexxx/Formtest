@@ -27,6 +27,18 @@
 <div style="margin-top: 10px;">
   <button onclick="enviarLista()">📤 Enviar Lista</button>
   <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
+  <button onclick="verVendas()">📋 Ver Vendas</button>
+  <button onclick="salvarVenda()">💾 Registrar Vendas</button>
+</div>
+<div id="popupVendas" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
+  background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:400px; z-index:9999; box-shadow:0 0 10px #000;">
+  <h3>🧾 Vendas Salvas</h3>
+  <pre id="vendasTexto" style="max-height:300px; overflow:auto; white-space:pre-wrap;"></pre>
+  <div style="display:flex; justify-content:space-between; margin-top:10px;">
+    <button onclick="fecharPopup()">❌ Fechar</button>
+    <button onclick="limparVendas()">🧹 Limpar</button>
+    <button onclick="baixarVendas()">💾 Salvar</button>
+  </div>
 </div>
   <script>
     const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
@@ -110,6 +122,86 @@
   
   const url = `https://wa.me/5566996455672?text=${encodeURIComponent(texto)}`;
   window.open(url, '_blank');
+}
+function verVendas() {
+  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+  if (vendas.length === 0) {
+    alert("Nenhuma venda registrada.");
+    return;
+  }
+
+  let texto = "";
+  vendas.forEach((v, i) => {
+    texto += `Venda ${i + 1} - ${v.data}\n`;
+    v.itens.forEach(it => {
+      texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
+    });
+    texto += `Total: R$ ${v.total.toFixed(2)}\n\n`;
+  });
+
+  alert(texto);
+}
+function salvarVenda() {
+  if (carrinho.length === 0) {
+    alert("Carrinho vazio!");
+    return;
+  }
+
+  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+  vendas.push({
+    data: new Date().toLocaleString(),
+    itens: carrinho.slice(),
+    total: carrinho.reduce((s, i) => s + i.preco, 0)
+  });
+
+  localStorage.setItem('vendas', JSON.stringify(vendas));
+  alert("Venda Registrada!");
+  limparCarrinho();
+}
+function verVendas() {
+  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+  const el = document.getElementById('vendasTexto');
+  if (vendas.length === 0) {
+    el.textContent = "Nenhuma venda registrada.";
+  } else {
+    let texto = "";
+    vendas.forEach((v, i) => {
+      texto += `Venda ${i + 1} - ${v.data}\n`;
+      v.itens.forEach(it => {
+        texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
+      });
+      texto += `Total: R$ ${v.total.toFixed(2)}\n\n`;
+    });
+    el.textContent = texto;
+  }
+  document.getElementById('popupVendas').style.display = 'block';
+}
+
+function fecharPopup() {
+  document.getElementById('popupVendas').style.display = 'none';
+}
+
+function limparVendas() {
+  const confirmar = confirm("Tem certeza que deseja apagar todas as vendas?");
+  if (!confirmar) return;
+
+  localStorage.removeItem('vendas');
+  document.getElementById('vendasTexto').textContent = "Nenhuma venda registrada.";
+  alert("Vendas apagadas.");
+}
+
+function baixarVendas() {
+  const texto = document.getElementById('vendasTexto').textContent;
+  if (!texto || texto.includes("Nenhuma venda")) {
+    alert("Nada para salvar.");
+    return;
+  }
+  const blob = new Blob([texto], { type: "text/plain" });
+  const link = document.createElement("a");
+  const data = new Date().toISOString().split("T")[0];
+  link.download = `vendas_${data}.txt`;
+  link.href = URL.createObjectURL(blob);
+  link.click();
 }
   </script>
 </body>
