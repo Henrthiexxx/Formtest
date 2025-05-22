@@ -24,7 +24,10 @@
   <h2>🧾 Lista de Compras</h2>
   <ul id="carrinho"></ul>
   <p id="total">Total: R$ 0,00</p>
-
+<div style="margin-top: 10px;">
+  <button onclick="enviarLista()">📤 Enviar Lista</button>
+  <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
+</div>
   <script>
     const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
     const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
@@ -92,6 +95,21 @@
     function limparCarrinho() {
   carrinho = [];
   atualizarCarrinho();
+}
+    function enviarLista() {
+  if (carrinho.length === 0) {
+    alert("Carrinho vazio!");
+    return;
+  }
+  let texto = "Olá! Segue minha lista de compras:\n\n";
+  carrinho.forEach(item => {
+    texto += `• ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
+  });
+  const total = carrinho.reduce((s, i) => s + i.preco, 0);
+  texto += `\nTotal: R$ ${total.toFixed(2)}`;
+  
+  const url = `https://wa.me/5566996455672?text=${encodeURIComponent(texto)}`;
+  window.open(url, '_blank');
 }
   </script>
   <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
