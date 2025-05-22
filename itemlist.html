@@ -35,7 +35,11 @@
     fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
       .then(r => r.json())
       .then(res => {
-        produtos = (res.values || []).map(l => ({ nome: l[0], preco: parseFloat((l[2] || '').replace(',', '.')) }));
+        produtos = (res.values || []).map(l => {
+          const precoBruto = (l[2] || '').replace(/\s/g, '').replace(',', '.');
+          const preco = parseFloat(precoBruto);
+          return { nome: l[0], preco: isNaN(preco) ? 0 : preco };
+        });
       });
 
     function mostrarSugestoes() {
