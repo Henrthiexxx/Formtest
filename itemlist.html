@@ -28,7 +28,7 @@
   <button onclick="enviarLista()">📤 Enviar Lista</button>
   <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
   <button onclick="verVendas()">📋 Ver Vendas</button>
-  <button onclick="salvarVenda()">💾 Registrar Venda</button>
+  <button onclick="salvarVenda()">💾 Registrar Vendas</button>
 </div>
 <div id="popupVendas" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
   background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:400px; z-index:9999; box-shadow:0 0 10px #000;">
@@ -38,6 +38,17 @@
     <button onclick="fecharPopup()">❌ Fechar</button>
     <button onclick="limparVendas()">🧹 Limpar</button>
     <button onclick="baixarVendas()">💾 Salvar</button>
+  </div>
+</div>
+<div id="popupPagamento" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
+background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:300px; z-index:9999; box-shadow:0 0 10px #000;">
+  <h3>💰 Forma de Pagamento</h3>
+  <p>Escolha ou pressione: [1]Dinheiro | [2]Pix | [3]Crédito | [4]Débito</p>
+  <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+    <button onclick="finalizarVenda('Dinheiro')">💵 Dinheiro</button>
+    <button onclick="finalizarVenda('Pix')">📲 Pix</button>
+    <button onclick="finalizarVenda('Crédito')">💳 Crédito</button>
+    <button onclick="finalizarVenda('Débito')">🏧 Débito</button>
   </div>
 </div>
   <script>
@@ -146,18 +157,16 @@ function salvarVenda() {
     alert("Carrinho vazio!");
     return;
   }
-
-  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-  vendas.push({
-    data: new Date().toLocaleString(),
-    itens: carrinho.slice(),
-    total: carrinho.reduce((s, i) => s + i.preco, 0)
-  });
-
-  localStorage.setItem('vendas', JSON.stringify(vendas));
-  alert("Venda Registrada!");
-  limparCarrinho();
+  document.getElementById('popupPagamento').style.display = 'block';
 }
+function salvarVenda() {
+  if (carrinho.length === 0) {
+    alert("Carrinho vazio!");
+    return;
+  }
+  document.getElementById('popupPagamento').style.display = 'block';
+}
+
 function verVendas() {
   const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
   const el = document.getElementById('vendasTexto');
@@ -166,7 +175,7 @@ function verVendas() {
   } else {
     let texto = "";
     vendas.forEach((v, i) => {
-      texto += `Venda ${i + 1} - ${v.data}\n`;
+      texto += `Venda ${i + 1} - ${v.data} - Pagamento: ${v.pagamento || 'Não informado'}\n`;
       v.itens.forEach(it => {
         texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
       });
@@ -203,6 +212,29 @@ function baixarVendas() {
   link.href = URL.createObjectURL(blob);
   link.click();
 }
+function finalizarVenda(forma) {
+  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+  vendas.push({
+    data: new Date().toLocaleString(),
+    itens: carrinho.slice(),
+    total: carrinho.reduce((s, i) => s + i.preco, 0),
+    pagamento: forma
+  });
+  localStorage.setItem('vendas', JSON.stringify(vendas));
+  alert(`Venda registrada com pagamento em ${forma}!`);
+  document.getElementById('popupPagamento').style.display = 'none';
+  limparCarrinho();
+}
+document.addEventListener("keydown", function(e) {
+  const p = document.getElementById("popupPagamento");
+  if (p.style.display === "block") {
+    const tecla = e.key.toLowerCase();
+    if (tecla === "1") finalizarVenda("Dinheiro");
+    if (tecla === "2") finalizarVenda("Pix");
+    if (tecla === "3") finalizarVenda("Crédito");
+    if (tecla === "4") finalizarVenda("Débito");
+  }
+});
   </script>
 </body>
 </html>
