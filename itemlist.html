@@ -4,20 +4,24 @@
   <meta charset="UTF-8">
   <title>Carrinho</title>
   <style>
-    body { font-family: Arial; padding: 20px; background: #f2f2f2; }
-    #produtos div, #carrinho li { margin: 5px 0; }
-    button { margin-left: 5px; padding: 5px 10px; }
-    #carrinho { list-style: none; padding: 0; }
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    input, button { padding: 8px; font-size: 14px; }
+    #sugestoes { background: #fff; border: 1px solid #ccc; max-width: 300px; }
+    .sugestao { padding: 5px; cursor: pointer; }
+    .sugestao:hover { background: #eee; }
+    #detalheProduto { margin-top: 10px; }
+    #carrinho li { margin: 5px 0; }
     #total { font-weight: bold; margin-top: 10px; }
-    input[type="text"] { padding: 5px; width: 100%; max-width: 300px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h2>🛒 Produtos</h2>
-  <input type="text" id="busca" placeholder="Buscar produto..." oninput="filtrarProdutos()">
-  <div id="produtos">Carregando produtos...</div>
+  <h2>🛒 Buscar Produto</h2>
+  <input type="text" id="busca" placeholder="Digite o nome do produto..." oninput="mostrarSugestoes()">
+  <div id="sugestoes"></div>
 
-  <h2>🧾 Carrinho</h2>
+  <div id="detalheProduto"></div>
+
+  <h2>🧾 Lista de Compras</h2>
   <ul id="carrinho"></ul>
   <p id="total">Total: R$ 0,00</p>
 
@@ -25,25 +29,37 @@
     const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
     const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
     const ABA = "Products";
-    let dados = [], carrinho = [];
+    let produtos = [], carrinho = [];
 
-    // Buscar dados da planilha
+    // Carregar produtos da planilha
     fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
       .then(r => r.json())
       .then(res => {
-        dados = (res.values || []).map(l => [l[0], parseFloat(l[2] || 0)]);
-        mostrarProdutos(dados);
+        produtos = (res.values || []).map(l => ({ nome: l[0], preco: parseFloat(l[2] || 0) }));
       });
 
-    function mostrarProdutos(lista) {
-      const div = document.getElementById('produtos');
+    function mostrarSugestoes() {
+      const termo = document.getElementById('busca').value.toLowerCase();
+      const sugestoes = produtos.filter(p => p.nome.toLowerCase().includes(termo));
+      const div = document.getElementById('sugestoes');
       div.innerHTML = '';
-      lista.forEach(([nome, preco]) => {
-        if (!nome || isNaN(preco)) return;
-        const item = document.createElement('div');
-        item.innerHTML = `${nome} - R$ ${preco.toFixed(2)} <button onclick="adicionarCarrinho('${nome}', ${preco})">Adicionar</button>`;
-        div.appendChild(item);
+      sugestoes.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'sugestao';
+        el.textContent = p.nome;
+        el.onclick = () => selecionarProduto(p);
+        div.appendChild(el);
       });
+    }
+
+    function selecionarProduto(produto) {
+      document.getElementById('sugestoes').innerHTML = '';
+      document.getElementById('busca').value = produto.nome;
+      const div = document.getElementById('detalheProduto');
+      div.innerHTML = `
+        <p><strong>${produto.nome}</strong> - R$ ${produto.preco.toFixed(2)}</p>
+        <button onclick="adicionarCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
+      `;
     }
 
     function adicionarCarrinho(nome, preco) {
@@ -55,19 +71,19 @@
       const ul = document.getElementById('carrinho');
       ul.innerHTML = '';
       let total = 0;
-      carrinho.forEach(item => {
+      carrinho.forEach((item, index) => {
         const li = document.createElement('li');
-        li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+        li.innerHTML = `${item.nome} - R$ ${item.preco.toFixed(2)} 
+          <button onclick="removerItem(${index})">Remover</button>`;
         ul.appendChild(li);
         total += item.preco;
       });
       document.getElementById('total').textContent = `Total: R$ ${total.toFixed(2)}`;
     }
 
-    function filtrarProdutos() {
-      const termo = document.getElementById('busca').value.toLowerCase();
-      const filtrados = dados.filter(([nome]) => nome.toLowerCase().includes(termo));
-      mostrarProdutos(filtrados);
+    function removerItem(i) {
+      carrinho.splice(i, 1);
+      atualizarCarrinho();
     }
   </script>
 </body>
