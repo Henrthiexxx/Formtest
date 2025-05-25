@@ -19,52 +19,59 @@
   <input type="text" id="busca" placeholder="Digite o nome do produto..." oninput="mostrarSugestoes()">
   <div id="sugestoes"></div>
 
+  <h2>🔢 Buscar por Código</h2>
+  <input type="number" id="buscaCodigo" placeholder="Digite o código..." oninput="iniciarBuscaCodigo()">
+  <div id="resultadoCodigo"></div>
+
   <div id="detalheProduto"></div>
 
   <h2>🧾 Lista de Compras</h2>
   <ul id="carrinho"></ul>
   <p id="total">Total: R$ 0,00</p>
-<div style="margin-top: 10px;">
-  <button onclick="enviarLista()">📤 Enviar Lista</button>
-  <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
-  <button onclick="verVendas()">📋 Ver Vendas</button>
-  <button onclick="salvarVenda()">💾 Registrar Vendas</button>
-</div>
-<div id="popupVendas" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
-  background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:400px; z-index:9999; box-shadow:0 0 10px #000;">
-  <h3>🧾 Vendas Salvas</h3>
-  <pre id="vendasTexto" style="max-height:300px; overflow:auto; white-space:pre-wrap;"></pre>
-  <div style="display:flex; justify-content:space-between; margin-top:10px;">
-    <button onclick="fecharPopup()">❌ Fechar</button>
-    <button onclick="limparVendas()">🧹 Limpar</button>
-    <button onclick="baixarVendas()">💾 Salvar</button>
+
+  <div style="margin-top: 10px;">
+    <button onclick="enviarLista()">📤 Enviar Lista</button>
+    <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
+    <button onclick="verVendas()">📋 Ver Vendas</button>
+    <button onclick="salvarVenda()">💾 Registrar Vendas</button>
   </div>
-</div>
-<div id="popupPagamento" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
-background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:300px; z-index:9999; box-shadow:0 0 10px #000;">
-  <h3>💰 Forma de Pagamento</h3>
-  <p>Escolha ou pressione: [1]Dinheiro | [2]Pix | [3]Crédito | [4]Débito</p>
-  <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-    <button onclick="finalizarVenda('Dinheiro')">💵 Dinheiro</button>
-    <button onclick="finalizarVenda('Pix')">📲 Pix</button>
-    <button onclick="finalizarVenda('Crédito')">💳 Crédito</button>
-    <button onclick="finalizarVenda('Débito')">🏧 Débito</button>
+
+  <div id="popupVendas" style="display:none; position:fixed; top:10%; left:50%; transform:translateX(-50%);
+    background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:400px; z-index:9999; box-shadow:0 0 10px #000;">
+    <h3>🧾 Vendas Salvas</h3>
+    <pre id="vendasTexto" style="max-height:300px; overflow:auto; white-space:pre-wrap;"></pre>
+    <div style="display:flex; justify-content:space-between; margin-top:10px;">
+      <button onclick="fecharPopup()">❌ Fechar</button>
+      <button onclick="limparVendas()">🧹 Limpar</button>
+      <button onclick="baixarVendas()">💾 Salvar</button>
+    </div>
   </div>
-</div>
+
+  <div id="popupPagamento" style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
+  background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:300px; z-index:9999; box-shadow:0 0 10px #000;">
+    <h3>💰 Forma de Pagamento</h3>
+    <p>Escolha ou pressione: [1]Dinheiro | [2]Pix | [3]Crédito | [4]Débito</p>
+    <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
+      <button onclick="finalizarVenda('Dinheiro')">💵 Dinheiro</button>
+      <button onclick="finalizarVenda('Pix')">📲 Pix</button>
+      <button onclick="finalizarVenda('Crédito')">💳 Crédito</button>
+      <button onclick="finalizarVenda('Débito')">🏧 Débito</button>
+    </div>
+  </div>
+
   <script>
     const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
     const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
     const ABA = "Products";
     let produtos = [], carrinho = [];
 
-    // Carregar produtos da planilha
     fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
       .then(r => r.json())
       .then(res => {
         produtos = (res.values || []).map(l => {
           const precoBruto = (l[2] || '').replace(/[^\d,.-]/g, '').replace(',', '.');
           const preco = parseFloat(precoBruto);
-          return { nome: l[0],codigo: l[1], preco: isNaN(preco) ? 0 : preco };
+          return { nome: l[0], codigo: l[1], preco: isNaN(preco) ? 0 : preco };
         });
       });
 
@@ -115,180 +122,156 @@ background:#fff; border:1px solid #ccc; padding:20px; width:90%; max-width:300px
       carrinho.splice(i, 1);
       atualizarCarrinho();
     }
+
     function limparCarrinho() {
-  carrinho = [];
-  atualizarCarrinho();
-}
+      carrinho = [];
+      atualizarCarrinho();
+    }
+
     function enviarLista() {
-  if (carrinho.length === 0) {
-    alert("Carrinho vazio!");
-    return;
-  }
-  let texto = "Olá! Segue minha lista de compras:\n\n";
-  carrinho.forEach(item => {
-    texto += `• ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
-  });
-  const total = carrinho.reduce((s, i) => s + i.preco, 0);
-  texto += `\nTotal: R$ ${total.toFixed(2)}`;
-  
-  const url = `https://wa.me/5566996455672?text=${encodeURIComponent(texto)}`;
-  window.open(url, '_blank');
-}
-function verVendas() {
-  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-  if (vendas.length === 0) {
-    alert("Nenhuma venda registrada.");
-    return;
-  }
-
-  let texto = "";
-  vendas.forEach((v, i) => {
-    texto += `Venda ${i + 1} - ${v.data}\n`;
-    v.itens.forEach(it => {
-      texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
-    });
-    texto += `Total: R$ ${v.total.toFixed(2)}\n\n`;
-  });
-
-  alert(texto);
-}
-function salvarVenda() {
-  if (carrinho.length === 0) {
-    alert("Carrinho vazio!");
-    return;
-  }
-  document.getElementById('popupPagamento').style.display = 'block';
-}
-function salvarVenda() {
-  if (carrinho.length === 0) {
-    alert("Carrinho vazio!");
-    return;
-  }
-  document.getElementById('popupPagamento').style.display = 'block';
-}
-
-function verVendas() {
-  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-  const el = document.getElementById('vendasTexto');
-  if (vendas.length === 0) {
-    el.textContent = "Nenhuma venda registrada.";
-  } else {
-    let texto = "";
-    vendas.forEach((v, i) => {
-      texto += `Venda ${i + 1} - ${v.data} - Pagamento: ${v.pagamento || 'Não informado'}\n`;
-      v.itens.forEach(it => {
-        texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
+      if (carrinho.length === 0) {
+        alert("Carrinho vazio!");
+        return;
+      }
+      let texto = "Olá! Segue minha lista de compras:\n\n";
+      carrinho.forEach(item => {
+        texto += `• ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
       });
-      texto += `Total: R$ ${v.total.toFixed(2)}\n\n`;
+      const total = carrinho.reduce((s, i) => s + i.preco, 0);
+      texto += `\nTotal: R$ ${total.toFixed(2)}`;
+      const url = `https://wa.me/5566996455672?text=${encodeURIComponent(texto)}`;
+      window.open(url, '_blank');
+    }
+
+    function verVendas() {
+      const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+      const el = document.getElementById('vendasTexto');
+      if (vendas.length === 0) {
+        el.textContent = "Nenhuma venda registrada.";
+      } else {
+        let texto = "";
+        vendas.forEach((v, i) => {
+          texto += `Venda ${i + 1} - ${v.data} - Pagamento: ${v.pagamento || 'Não informado'}\n`;
+          v.itens.forEach(it => {
+            texto += `• ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
+          });
+          texto += `Total: R$ ${v.total.toFixed(2)}\n\n`;
+        });
+        el.textContent = texto;
+      }
+      document.getElementById('popupVendas').style.display = 'block';
+    }
+
+    function salvarVenda() {
+      if (carrinho.length === 0) {
+        alert("Carrinho vazio!");
+        return;
+      }
+      document.getElementById('popupPagamento').style.display = 'block';
+    }
+
+    function fecharPopup() {
+      document.getElementById('popupVendas').style.display = 'none';
+    }
+
+    function limparVendas() {
+      if (confirm("Tem certeza que deseja apagar todas as vendas?")) {
+        localStorage.removeItem('vendas');
+        document.getElementById('vendasTexto').textContent = "Nenhuma venda registrada.";
+        alert("Vendas apagadas.");
+      }
+    }
+
+    function baixarVendas() {
+      const texto = document.getElementById('vendasTexto').textContent;
+      if (!texto || texto.includes("Nenhuma venda")) {
+        alert("Nada para salvar.");
+        return;
+      }
+      const blob = new Blob([texto], { type: "text/plain" });
+      const link = document.createElement("a");
+      const data = new Date().toISOString().split("T")[0];
+      link.download = `vendas_${data}.txt`;
+      link.href = URL.createObjectURL(blob);
+      link.click();
+    }
+
+    function finalizarVenda(forma) {
+      const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+      vendas.push({
+        data: new Date().toLocaleString(),
+        itens: carrinho.slice(),
+        total: carrinho.reduce((s, i) => s + i.preco, 0),
+        pagamento: forma
+      });
+      localStorage.setItem('vendas', JSON.stringify(vendas));
+      alert(`Venda registrada com pagamento em ${forma}!`);
+      document.getElementById('popupPagamento').style.display = 'none';
+      limparCarrinho();
+    }
+
+    document.addEventListener("keydown", function(e) {
+      const p = document.getElementById("popupPagamento");
+      if (p.style.display === "block") {
+        const tecla = e.key.toLowerCase();
+        if (tecla === "1") finalizarVenda("Dinheiro");
+        if (tecla === "2") finalizarVenda("Pix");
+        if (tecla === "3") finalizarVenda("Crédito");
+        if (tecla === "4") finalizarVenda("Débito");
+      }
     });
-    el.textContent = texto;
-  }
-  document.getElementById('popupVendas').style.display = 'block';
-}
 
-function fecharPopup() {
-  document.getElementById('popupVendas').style.display = 'none';
-}
+    // 🔽 NOVA FUNÇÃO DE BUSCA POR CÓDIGO 🔽
+    let timeoutBuscaCodigo = null;
 
-function limparVendas() {
-  const confirmar = confirm("Tem certeza que deseja apagar todas as vendas?");
-  if (!confirmar) return;
+    function iniciarBuscaCodigo() {
+      clearTimeout(timeoutBuscaCodigo);
+      timeoutBuscaCodigo = setTimeout(buscarPorCodigo, 800);
+    }
 
-  localStorage.removeItem('vendas');
-  document.getElementById('vendasTexto').textContent = "Nenhuma venda registrada.";
-  alert("Vendas apagadas.");
-}
+    function buscarPorCodigo() {
+      const codigo = document.getElementById('buscaCodigo').value.trim();
+      const div = document.getElementById('resultadoCodigo');
+      div.innerHTML = '';
 
-function baixarVendas() {
-  const texto = document.getElementById('vendasTexto').textContent;
-  if (!texto || texto.includes("Nenhuma venda")) {
-    alert("Nada para salvar.");
-    return;
-  }
-  const blob = new Blob([texto], { type: "text/plain" });
-  const link = document.createElement("a");
-  const data = new Date().toISOString().split("T")[0];
-  link.download = `vendas_${data}.txt`;
-  link.href = URL.createObjectURL(blob);
-  link.click();
-}
-function finalizarVenda(forma) {
-  const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-  vendas.push({
-    data: new Date().toLocaleString(),
-    itens: carrinho.slice(),
-    total: carrinho.reduce((s, i) => s + i.preco, 0),
-    pagamento: forma
-  });
-  localStorage.setItem('vendas', JSON.stringify(vendas));
-  alert(`Venda registrada com pagamento em ${forma}!`);
-  document.getElementById('popupPagamento').style.display = 'none';
-  limparCarrinho();
-}
+      if (!codigo) return;
+
+      // Ajuste para comparar como string
+      const encontrados = produtos.filter(p => String(p.codigo).trim() === codigo);
+
+      if (encontrados.length === 0) {
+        div.innerHTML = '<p>Nenhum produto encontrado.</p>';
+        return;
+      }
+
+      if (encontrados.length > 1) {
+        alert("⚠️ Código Duplicado!");
+        document.getElementById('buscaCodigo').value = '';
+        return;
+      }
+
+      const produto = encontrados[0];
+      const el = document.createElement('div');
+      el.innerHTML = `
+        <p><strong>${produto.nome}</strong> - R$ ${produto.preco.toFixed(2)}</p>
+        <button onclick="adicionarCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
+        <button onclick="limparBuscaCodigo()">Limpar</button>
+      `;
+      div.appendChild(el);
+    }
+
+    function limparBuscaCodigo() {
+      document.getElementById('buscaCodigo').value = '';
+      document.getElementById('resultadoCodigo').innerHTML = '';
+    }
 document.addEventListener("keydown", function(e) {
-  const p = document.getElementById("popupPagamento");
-  if (p.style.display === "block") {
-    const tecla = e.key.toLowerCase();
-    if (tecla === "1") finalizarVenda("Dinheiro");
-    if (tecla === "2") finalizarVenda("Pix");
-    if (tecla === "3") finalizarVenda("Crédito");
-    if (tecla === "4") finalizarVenda("Débito");
+  if (e.key === "F3") {
+    e.preventDefault(); // Impede a ação padrão do navegador (pesquisa nativa)
+    document.getElementById("buscaCodigo").value = '';
+    document.getElementById("resultadoCodigo").innerHTML = '';
+    document.getElementById("buscaCodigo").focus();
   }
 });
-  document.addEventListener("keydown", function(e) {
-  const p = document.getElementById("popupPagamento");
-  if (p.style.display === "block") {
-    const tecla = e.key.toLowerCase();
-    if (tecla === "1") finalizarVenda("Dinheiro");
-    if (tecla === "2") finalizarVenda("Pix");
-    if (tecla === "3") finalizarVenda("Crédito");
-    if (tecla === "4") finalizarVenda("Débito");
-  }
-});
-
-// 🔽 INSERE O NOVO SCRIPT AQUI 🔽
-let timeoutBuscaCodigo = null;
-
-function iniciarBuscaCodigo() {
-  clearTimeout(timeoutBuscaCodigo);
-  timeoutBuscaCodigo = setTimeout(buscarPorCodigo, 800);
-}
-
-function buscarPorCodigo() {
-  const codigo = document.getElementById('buscaCodigo').value.trim();
-  const div = document.getElementById('resultadoCodigo');
-  div.innerHTML = '';
-
-  if (!codigo) return;
-
-  const encontrados = produtos.filter(p => p.codigo === codigo);
-
-  if (encontrados.length === 0) {
-    div.innerHTML = '<p>Nenhum produto encontrado.</p>';
-    return;
-  }
-
-  if (encontrados.length > 1) {
-    alert("⚠️ Código Duplicado!");
-    document.getElementById('buscaCodigo').value = '';
-    return;
-  }
-
-  const produto = encontrados[0];
-  const el = document.createElement('div');
-  el.innerHTML = `
-    <p><strong>${produto.nome}</strong> - R$ ${produto.preco.toFixed(2)}</p>
-    <button onclick="adicionarCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
-    <button onclick="limparBuscaCodigo()">Limpar</button>
-  `;
-  div.appendChild(el);
-}
-
-function limparBuscaCodigo() {
-  document.getElementById('buscaCodigo').value = '';
-  document.getElementById('resultadoCodigo').innerHTML = '';
-}
-// 🔼 FIM DO NOVO SCRIPT 🔼
-</script>
+  </script>
 </body>
 </html>
