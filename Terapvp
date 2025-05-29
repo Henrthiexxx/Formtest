@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Ficha de Inscrição PVP</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f0f0; margin: 0; }
+  header { background: #333; color: #fff; padding: 10px 20px; display: flex; justify-content: space-between; }
+  header button { background: #444; color: #fff; border: none; padding: 6px 12px; cursor: pointer; }
+  header button:hover { background: #555; }
+  .container { padding: 20px; }
+  .campo { margin-bottom: 10px; }
+  .hidden { display: none; }
+  label { display: block; margin-bottom: 4px; }
+  input[type="text"], input[type="number"], select { width: 200px; padding: 4px; }
+  .contato-icones img { width: 32px; cursor: pointer; margin-right: 10px; }
+</style>
+</head>
+<body>
+
+<header>
+  <button onclick="mostrarRegras()">Regras</button>
+  <button onclick="enviarCadastro()">Enviar Cadastro</button>
+</header>
+
+<div class="container">
+
+  <h2>Ficha de Inscrição – Torneio de PVP</h2>
+
+  <div class="campo">
+    <label>Nickname:</label>
+    <input type="text" id="nickname">
+  </div>
+
+  <div class="campo">
+    <label>Classe:</label>
+    <select id="classe">
+      <option value="">Selecione</option>
+      <option>Archer</option>
+      <option>Berserker</option>
+      <option>Brawler</option>
+      <option>Gunner</option>
+      <option>Lancer</option>
+      <option>Mystic</option>
+      <option>Ninja</option>
+      <option>Priest</option>
+      <option>Reaper</option>
+      <option>Slayer</option>
+      <option>Sorcerer</option>
+      <option>Valkyrie</option>
+      <option>Warrior</option>
+    </select>
+  </div>
+
+  <div class="campo">
+    <label>Contato:</label>
+    <div class="contato-icones">
+      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111370.png" alt="Discord" onclick="selecionaContato('discord')">
+      <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" onclick="selecionaContato('whatsapp')">
+    </div>
+    <input type="text" id="campoDiscord" placeholder="Digite seu Discord" class="hidden">
+    <input type="number" id="campoWhatsapp" placeholder="Digite seu WhatsApp" class="hidden">
+  </div>
+
+  <div class="campo">
+    <label>Modos de PVP preferidos:</label>
+    <label><input type="checkbox" name="modo" value="Duelo entre classes"> Duelo entre classes</label>
+    <label><input type="checkbox" name="modo" value="Duelo de chaves"> Duelo de chaves</label>
+    <label><input type="checkbox" name="modo" value="Duelo por ranking"> Duelo por ranking</label>
+    <label><input type="checkbox" name="modo" value="Duelo de resistência"> Duelo de resistência</label>
+    <label><input type="checkbox" name="modo" value="Duelo aleatório"> Duelo aleatório</label>
+    <label><input type="checkbox" name="modo" value="Duelo em duplas rotativas"> Duelo em duplas rotativas</label>
+    <label><input type="checkbox" name="modo" value="Defesa do cinturão"> Defesa do cinturão</label>
+    <label><input type="checkbox" name="modo" value="Torneio de Representantes de Guilds"> Torneio de Representantes de Guilds</label>
+    <label><input type="checkbox" name="modo" value="Duelo Uniclasses"> Duelo Uniclasses</label>
+  </div>
+
+  <div class="campo">
+    <label>Disponibilidade de Horário:</label>
+    <div id="diasSemana"></div>
+  </div>
+
+</div>
+
+<script>
+  const dias = ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+  const diasSemanaDiv = document.getElementById('diasSemana');
+
+  dias.forEach(dia => {
+    diasSemanaDiv.innerHTML += `
+      <div><strong>${dia}:</strong>
+        <label><input type="checkbox" name="${dia}-manha"> Manhã</label>
+        <label><input type="checkbox" name="${dia}-tarde"> Tarde</label>
+        <label><input type="checkbox" name="${dia}-noite"> Noite</label>
+      </div>`;
+  });
+
+  function selecionaContato(tipo) {
+    const discord = document.getElementById('campoDiscord');
+    const whatsapp = document.getElementById('campoWhatsapp');
+    if (tipo === 'discord') {
+      discord.classList.remove('hidden');
+      whatsapp.classList.add('hidden');
+    } else {
+      whatsapp.classList.remove('hidden');
+      discord.classList.add('hidden');
+    }
+  }
+
+  function mostrarRegras() {
+    alert("As regras do torneio podem incluir: respeito, fair play e uso apenas dos recursos do jogo!");
+  }
+
+  function enviarCadastro() {
+    alert("Cadastro enviado! Revisaremos e entraremos em contato.");
+    // Aqui, o dev pode integrar com backend (Google Forms, APIs, etc).
+  }
+</script>
+
+</body>
+</html>
