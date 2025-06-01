@@ -14,6 +14,8 @@
   label { display: block; margin-bottom: 4px; }
   input[type="text"], input[type="number"], select { width: 200px; padding: 4px; }
   .contato-icones img { width: 32px; cursor: pointer; margin-right: 10px; }
+  #classeBtns button { padding: 4px 6px; font-size: 12px; border: 1px solid #ccc; background: #eee; cursor: pointer; }
+  #classeBtns button:hover { background: #ddd; }
 </style>
 </head>
 <body>
@@ -24,7 +26,6 @@
 </header>
 
 <div class="container">
-
   <h2>Ficha de Inscrição – Torneio de PVP</h2>
 
   <div class="campo">
@@ -32,26 +33,26 @@
     <input type="text" id="nickname">
   </div>
 
- <div class="campo">
-  <label for="classe">Classe:</label>
-  <input list="classes" id="classe" name="classe">
-  <datalist id="classes">
-    <option value="Archer">
-    <option value="Berserker">
-    <option value="Brawler">
-    <option value="Gunner">
-    <option value="Lancer">
-    <option value="Mystic">
-    <option value="Ninja">
-    <option value="Priest">
-    <option value="Reaper">
-    <option value="Slayer">
-    <option value="Sorcerer">
-    <option value="Valkyrie">
-    <option value="Warrior">
-  </datalist>
-</div>
-  
+  <div class="campo">
+    <label>Classe:</label>
+    <div id="classeBtns" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
+      <button onclick="selecionaClasse(this)">Archer</button>
+      <button onclick="selecionaClasse(this)">Berserker</button>
+      <button onclick="selecionaClasse(this)">Brawler</button>
+      <button onclick="selecionaClasse(this)">Gunner</button>
+      <button onclick="selecionaClasse(this)">Lancer</button>
+      <button onclick="selecionaClasse(this)">Mystic</button>
+      <button onclick="selecionaClasse(this)">Ninja</button>
+      <button onclick="selecionaClasse(this)">Priest</button>
+      <button onclick="selecionaClasse(this)">Reaper</button>
+      <button onclick="selecionaClasse(this)">Slayer</button>
+      <button onclick="selecionaClasse(this)">Sorcerer</button>
+      <button onclick="selecionaClasse(this)">Valkyrie</button>
+      <button onclick="selecionaClasse(this)">Warrior</button>
+    </div>
+    <input type="hidden" id="classeSelecionada">
+  </div>
+
   <div class="campo">
     <label>Contato:</label>
     <div class="contato-icones">
@@ -79,7 +80,6 @@
     <label>Disponibilidade de Horário:</label>
     <div id="diasSemana"></div>
   </div>
-
 </div>
 
 <script>
@@ -94,6 +94,12 @@
         <label><input type="checkbox" name="${dia}-noite"> Noite</label>
       </div>`;
   });
+
+  function selecionaClasse(btn) {
+    document.querySelectorAll("#classeBtns button").forEach(b => b.style.background = "");
+    btn.style.background = "#8cf";
+    document.getElementById("classeSelecionada").value = btn.textContent;
+  }
 
   function selecionaContato(tipo) {
     const discord = document.getElementById('campoDiscord');
@@ -113,7 +119,6 @@
 
   function enviarCadastro() {
     alert("Cadastro enviado! Revisaremos e entraremos em contato.");
-    // Aqui, o dev pode integrar com backend (Google Forms, APIs, etc).
   }
 </script>
 
