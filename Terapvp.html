@@ -32,26 +32,26 @@
     <input type="text" id="nickname">
   </div>
 
-  <div class="campo">
-    <label>Classe:</label>
-    <select id="classe">
-      <option value="">Selecione</option>
-      <option>Archer</option>
-      <option>Berserker</option>
-      <option>Brawler</option>
-      <option>Gunner</option>
-      <option>Lancer</option>
-      <option>Mystic</option>
-      <option>Ninja</option>
-      <option>Priest</option>
-      <option>Reaper</option>
-      <option>Slayer</option>
-      <option>Sorcerer</option>
-      <option>Valkyrie</option>
-      <option>Warrior</option>
-    </select>
-  </div>
-
+ <div class="campo">
+  <label for="classe">Classe:</label>
+  <input list="classes" id="classe" name="classe">
+  <datalist id="classes">
+    <option value="Archer">
+    <option value="Berserker">
+    <option value="Brawler">
+    <option value="Gunner">
+    <option value="Lancer">
+    <option value="Mystic">
+    <option value="Ninja">
+    <option value="Priest">
+    <option value="Reaper">
+    <option value="Slayer">
+    <option value="Sorcerer">
+    <option value="Valkyrie">
+    <option value="Warrior">
+  </datalist>
+</div>
+  
   <div class="campo">
     <label>Contato:</label>
     <div class="contato-icones">
