@@ -1,158 +1,40 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <title>Monte sua Pizza Grande</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .btn-group-bottom {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 30px;
-      padding-right: 20px;
-    }
-    .btn-group-bottom button {
-      font-size: 13px;
-      padding: 6px 12px;
-      background: #444;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .qtd-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    .qtd-controls button {
-      padding: 5px 10px;
-      font-size: 18px;
-      background: #444;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .qtd-controls span {
-      font-weight: bold;
-      font-size: 16px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loja Luxo</title>
+  <link rel="stylesheet" href="style.css" />
+<div class="top-nav">
+  <button class="corner-btn left-btn">👤 Perfil</button>
+  <button class="corner-btn right-btn">🛒 Carrinho</button>
+</div>
 </head>
 <body>
-  <div id="valorTotal" style="position: absolute; top: 20px; right: 20px; background: #1a1a1a; color: #ffd700; padding: 10px 20px; border: 2px solid #ffd700; border-radius: 10px; font-weight: bold; z-index: 999;">
-    Total: R$ 0,00
+  <header>
+    <h1>Loja Luxo</h1>
+    <p>Bem-vindo à sua experiência premium</p>
+  </header>
+
+  <main class="button-grid">
+    <button class="btn">👤 Perfil</button>
+    <button class="btn">🛍️ Catálogo de Produtos</button>
+    <button class="btn">📝 Fazer Pedido</button>
+    <button class="btn">🛒 Carrinho</button>
+    <button class="btn">📦 Histórico de Pedidos</button>
+    <button class="btn">💬 Suporte</button>
+    <button class="btn logout">🚪 Sair</button>
+  </main>
+
+ <footer class="footer-nav">
+  <div class="footer-left">
+    <button class="nav-btn">⬅️ Voltar</button>
+    <button class="nav-btn">➡️ Avançar</button>
   </div>
-
-  <h2>🍕 Monte sua Pizza Grande</h2>
-
-  <div class="qtd-controls">
-    <label>Quantidade:</label>
-    <button type="button" onclick="alterarQuantidade(-1)">-</button>
-    <span id="qtdPizza">1</span>
-    <button type="button" onclick="alterarQuantidade(1)">+</button>
+  <div class="footer-right">
+    <button class="nav-btn">🏠 Início</button>
   </div>
+</footer>
 
-  <form id="formPizza" onsubmit="adicionarAoCarrinho(); return false;">
-    <div class="section">
-      <h3>1. Escolha o Tamanho da Pizza</h3>
-      <div class="btn-group" id="tamanhoGroup">
-        <label class="btn-option"><input type="radio" name="tamanho" value="Pequena">Pequena - R$ 30,00</label>
-        <label class="btn-option"><input type="radio" name="tamanho" value="Média">Média - R$ 40,00</label>
-        <label class="btn-option"><input type="radio" name="tamanho" value="Grande">Grande - R$ 50,00</label>
-      </div>
-
-      <h3>2. Escolha até 4 Sabores</h3>
-      <div class="btn-group" id="saboresGroup">
-        <label class="btn-option"><input type="checkbox" name="sabor" value="Sabores do Campo"> Sabores do Campo</label>
-        <label class="btn-option"><input type="checkbox" name="sabor" value="Carnuda Suprema"> Carnuda Suprema</label>
-        <label class="btn-option"><input type="checkbox" name="sabor" value="Verde Leve"> Verde Leve</label>
-        <label class="btn-option"><input type="checkbox" name="sabor" value="Doce Tentação"> Doce Tentação</label>
-        <label class="btn-option"><input type="checkbox" name="sabor" value="Quatro Delícias"> Quatro Delícias</label>
-      </div>
-
-      <h3>3. Escolha a Borda (R$ 10,00)</h3>
-      <div class="btn-group" id="bordaGroup">
-        <label class="btn-option"><input type="radio" name="borda" value="Catupiry">Catupiry</label>
-        <label class="btn-option"><input type="radio" name="borda" value="Cheddar">Cheddar</label>
-        <label class="btn-option"><input type="radio" name="borda" value="">Nenhuma</label>
-      </div>
-
-      <h3>Adicionais (R$ 1,00 cada, máx. 3)</h3>
-      <div class="btn-group" id="adicionaisGroup">
-        <label class="btn-option"><input type="checkbox" name="adicional" value="Milho">Milho</label>
-        <label class="btn-option"><input type="checkbox" name="adicional" value="Bacon">Bacon</label>
-        <label class="btn-option"><input type="checkbox" name="adicional" value="Palmito">Palmito</label>
-      </div>
-    </div>
-
-    <div class="btn-group-bottom">
-      <button type="button" onclick="window.location.href='index.html'">Voltar</button>
-      <button type="submit">Adicionar ao Carrinho</button>
-      <button type="button" onclick="window.location.href='carrinho.html'">Carrinho</button>
-      <button type="button" onclick="window.location.href='delivery.html'">Próximo</button>
-    </div>
-  </form>
-
-  <script>
-    let quantidade = 1;
-    let valorBase = 0;
-
-    function alterarQuantidade(delta) {
-      quantidade = Math.min(6, Math.max(1, quantidade + delta));
-      document.getElementById("qtdPizza").innerText = quantidade;
-      atualizarValorTotal();
-    }
-
-    function atualizarValorTotal() {
-      const tamanho = document.querySelector('input[name="tamanho"]:checked');
-      if (!tamanho) return;
-
-      if (tamanho.value === "Pequena") valorBase = 30;
-      else if (tamanho.value === "Média") valorBase = 40;
-      else valorBase = 50;
-
-      let preco = valorBase;
-
-      const borda = document.querySelector('input[name="borda"]:checked');
-      if (borda && borda.value) preco += 10;
-
-      const adicionais = document.querySelectorAll('input[name="adicional"]:checked');
-      preco += adicionais.length * 1;
-
-      const total = preco * quantidade;
-      document.getElementById("valorTotal").innerText = `Total: R$ ${total.toFixed(2)}`;
-      return total;
-    }
-
-    function adicionarAoCarrinho() {
-      const form = document.getElementById("formPizza");
-      const dados = new FormData(form);
-
-      const item = {
-        produto: "Pizza",
-        tamanho: dados.get("tamanho") || "Grande",
-        sabores: dados.getAll("sabor"),
-        borda: dados.get("borda") || "Nenhuma",
-        adicionais: dados.getAll("adicional"),
-        preco: atualizarValorTotal(),
-        quantidade: quantidade,
-        data: new Date().toISOString()
-      };
-
-      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
-      carrinho.push(item);
-      localStorage.setItem("carrinho", JSON.stringify(carrinho));
-
-      alert("🍕 Pedido adicionado ao carrinho!");
-    }
-
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('change', atualizarValorTotal);
-    });
-  </script>
 </body>
 </html>
