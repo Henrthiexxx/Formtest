@@ -2,24 +2,27 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pizzas</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
+      padding: 1rem;
       background: #fff3e0;
     }
 
     h2 {
       color: #c0392b;
+      font-size: 1.4rem;
     }
 
     .sabor {
       border: 1px solid #ccc;
-      padding: 10px;
-      margin: 5px 0;
+      padding: 0.8rem;
+      margin: 0.5rem 0;
       background: #fff;
       cursor: pointer;
+      border-radius: 8px;
     }
 
     .sabor.selecionado {
@@ -28,139 +31,126 @@
     }
 
     button {
-      padding: 8px 12px;
-      font-size: 14px;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
       cursor: pointer;
+      border-radius: 6px;
+      border: none;
     }
 
     #sabores {
-      margin-bottom: 10px;
+      margin-bottom: 1rem;
     }
 
     #painelSelecionado {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      gap: 0.5rem;
       background: #fff8f0;
       border: 1px solid #ccc;
-      padding: 10px;
-      margin-top: 15px;
-      flex-wrap: wrap;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
     }
 
     #painelSelecionado .acoes {
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    @media (min-width: 500px) {
+      #painelSelecionado {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #painelSelecionado .acoes {
+        flex-direction: row;
+      }
     }
 
     #valorFixo {
       position: fixed;
       top: 10px;
-      right: 20px;
+      right: 10px;
       background: #fff8f0;
       border: 1px solid #ccc;
-      padding: 8px 12px;
+      padding: 0.5rem 1rem;
       font-weight: bold;
-      box-shadow: 0 0 5px rgba(0,0,0,0.1);
       z-index: 1000;
+      border-radius: 8px;
     }
 
     #carrinho ul {
-      margin-top: 10px;
-      padding-left: 20px;
+      padding-left: 1.2rem;
     }
 
-    #carrinho li {
-      margin-bottom: 5px;
+    #popupAviso {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
     }
 
-.popup-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-  animation: fadeIn 0.3s ease;
-}
+    .popup-box {
+      background: #fff;
+      padding: 1.5rem 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      max-width: 320px;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
 
-.popup-box {
-  background: #fff;
-  padding: 1.5rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  max-width: 320px;
-  text-align: center;
-  font-family: Arial, sans-serif;
-  animation: slideIn 0.3s ease;
-}
+    .popup-box p {
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      color: #333;
+    }
 
-.popup-box p {
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  color: #333;
-}
+    .popup-btn {
+      background: #c0392b;
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-size: 1rem;
+    }
 
-.popup-btn {
-  background: #c0392b;
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  transition: background 0.2s ease;
-}
-
-.popup-btn:hover {
-  background: #e74c3c;
-}
-
-@keyframes fadeIn {
-  from { background: rgba(0,0,0,0); }
-  to { background: rgba(0,0,0,0.4); }
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
+    .popup-btn:hover {
+      background: #e74c3c;
+    }
   </style>
 </head>
 <body>
 
   <div id="valorFixo">
-    <strong>Total:</strong> R$ <span id="total">0.00</span>
+    Total: R$ <span id="total">0.00</span>
   </div>
 
-  <h2>🍕 Montar Pizza</h2>
-  <p>Escolha até <strong>2 sabores</strong>:</p>
-
+  <h2>🍕 Escolha até 2 Sabores</h2>
   <div id="sabores"></div>
 
   <div id="painelSelecionado">
-    <span id="selecionados" style="font-weight: bold;"></span>
+    <span id="selecionados"></span>
     <div class="acoes">
-      <button onclick="adicionarPizza()">➕ Adicionar ao Carrinho</button>
+      <button onclick="adicionarPizza()">➕ Adicionar</button>
       <button onclick="avancar()">➡️ Avançar</button>
     </div>
   </div>
 
   <h2>🧾 Carrinho</h2>
-  <div id="carrinho">
-    <ul id="listaCarrinho"></ul>
+  <div id="carrinho"><ul id="listaCarrinho"></ul></div>
 
-<div id="popupAviso" class="popup-overlay">
-  <div class="popup-box">
-    <p id="popupTexto"></p>
-    <button class="popup-btn" onclick="fecharPopupAviso()">Fechar</button>
-  </div>
-</div>
-
-</div>
-
+  <div id="popupAviso">
+    <div class="popup-box">
+      <p id="popupTexto"></p>
+      <button class="popup-btn" onclick="fecharPopupAviso()">Fechar</button>
+    </div>
   </div>
 
   <script>
@@ -173,6 +163,12 @@
     let selecionados = [];
     let carrinho = [];
 
+    // Carregar carrinho existente
+    const salvo = localStorage.getItem("carrinhoGlobal");
+    if (salvo) {
+      carrinho = JSON.parse(salvo);
+    }
+
     fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
       .then(r => r.json())
       .then(res => {
@@ -182,6 +178,7 @@
           categoria: l[2] || ''
         }));
         renderizarSabores();
+        atualizarCarrinho();
       });
 
     function renderizarSabores() {
@@ -190,7 +187,7 @@
       sabores.forEach((sabor, index) => {
         const div = document.createElement("div");
         div.className = "sabor";
-        div.innerHTML = `<strong>(${sabor.categoria}) ${sabor.nome}</strong><br><small>${sabor.descricao}</small>`;
+        div.innerHTML = `<strong>${sabor.nome}</strong><br><small>${sabor.descricao}</small>`;
         div.onclick = () => toggleSelecao(index, div);
         container.appendChild(div);
       });
@@ -199,7 +196,6 @@
     function toggleSelecao(index, elemento) {
       const sabor = sabores[index];
       const i = selecionados.indexOf(sabor);
-
       if (i !== -1) {
         selecionados.splice(i, 1);
         elemento.classList.remove("selecionado");
@@ -216,11 +212,7 @@
 
     function atualizarSelecionados() {
       const div = document.getElementById("selecionados");
-      if (selecionados.length === 0) {
-        div.innerHTML = "";
-        return;
-      }
-      div.innerHTML = `Selecionado: ${selecionados.map(s => `(${s.categoria}) ${s.nome}`).join(" + ")}`;
+      div.textContent = selecionados.map(s => s.nome).join(" + ");
     }
 
     function adicionarPizza() {
@@ -229,12 +221,13 @@
         return;
       }
 
-      const nome = `Pizza (${selecionados.map(s => `(${s.categoria}) ${s.nome}`).join(" + ")})`;
+      const nome = `Pizza (${selecionados.map(s => s.nome).join(" + ")})`;
       carrinho.push({ nome, preco: PRECO_PIZZA });
+      localStorage.setItem("carrinhoGlobal", JSON.stringify(carrinho));
       selecionados = [];
-      atualizarCarrinho();
       renderizarSabores();
       atualizarSelecionados();
+      atualizarCarrinho();
       mostrarPopup("Pizza adicionada ao carrinho!");
     }
 
@@ -242,7 +235,7 @@
       const ul = document.getElementById("listaCarrinho");
       ul.innerHTML = '';
       let total = 0;
-      carrinho.forEach((item, index) => {
+      carrinho.forEach((item) => {
         const li = document.createElement("li");
         li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
         ul.appendChild(li);
@@ -253,21 +246,21 @@
 
     function avancar() {
       if (carrinho.length === 0) {
-        mostrarPopup("Adicione uma pizza ao carrinho antes de avançar.");
+        mostrarPopup("Adicione uma pizza antes de avançar.");
         return;
       }
-      mostrarPopup("Você avançou para o próximo passo!");
-      // window.location.href = "proxima-etapa.html";
+      // Aqui você pode redirecionar para outra página (ex: catalog.html)
+      window.location.href = "catalog.html";
     }
-function mostrarPopup(mensagem) {
-  document.getElementById("popupTexto").textContent = mensagem;
-  document.getElementById("popupAviso").style.display = "flex";
-}
 
-function fecharPopupAviso() {
-  document.getElementById("popupAviso").style.display = "none";
-}
+    function mostrarPopup(msg) {
+      document.getElementById("popupTexto").textContent = msg;
+      document.getElementById("popupAviso").style.display = "flex";
+    }
 
+    function fecharPopupAviso() {
+      document.getElementById("popupAviso").style.display = "none";
+    }
   </script>
 
 </body>
