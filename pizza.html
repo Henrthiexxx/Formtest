@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pizzas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #fff3e0;
+    }
+
+    h2 {
+      color: #c0392b;
+    }
+
+    .sabor {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 5px 0;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .sabor.selecionado {
+      border-color: #c0392b;
+      background: #ffe6e0;
+    }
+
+    button {
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    #sabores {
+      margin-bottom: 10px;
+    }
+
+    #painelSelecionado {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8f0;
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    #painelSelecionado .acoes {
+      display: flex;
+      gap: 10px;
+    }
+
+    #valorFixo {
+      position: fixed;
+      top: 10px;
+      right: 20px;
+      background: #fff8f0;
+      border: 1px solid #ccc;
+      padding: 8px 12px;
+      font-weight: bold;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+
+    #carrinho ul {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+
+    #carrinho li {
+      margin-bottom: 5px;
+    }
+
+.popup-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s ease;
+}
+
+.popup-box {
+  background: #fff;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  max-width: 320px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  animation: slideIn 0.3s ease;
+}
+
+.popup-box p {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.popup-btn {
+  background: #c0392b;
+  color: #fff;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: background 0.2s ease;
+}
+
+.popup-btn:hover {
+  background: #e74c3c;
+}
+
+@keyframes fadeIn {
+  from { background: rgba(0,0,0,0); }
+  to { background: rgba(0,0,0,0.4); }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+  </style>
+</head>
+<body>
+
+  <div id="valorFixo">
+    <strong>Total:</strong> R$ <span id="total">0.00</span>
+  </div>
+
+  <h2>🍕 Montar Pizza</h2>
+  <p>Escolha até <strong>2 sabores</strong>:</p>
+
+  <div id="sabores"></div>
+
+  <div id="painelSelecionado">
+    <span id="selecionados" style="font-weight: bold;"></span>
+    <div class="acoes">
+      <button onclick="adicionarPizza()">➕ Adicionar ao Carrinho</button>
+      <button onclick="avancar()">➡️ Avançar</button>
+    </div>
+  </div>
+
+  <h2>🧾 Carrinho</h2>
+  <div id="carrinho">
+    <ul id="listaCarrinho"></ul>
+
+<div id="popupAviso" class="popup-overlay">
+  <div class="popup-box">
+    <p id="popupTexto"></p>
+    <button class="popup-btn" onclick="fecharPopupAviso()">Fechar</button>
+  </div>
+</div>
+
+</div>
+
+  </div>
+
+  <script>
+    const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
+    const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
+    const ABA = "Sabores";
+    const PRECO_PIZZA = 45.00;
+
+    let sabores = [];
+    let selecionados = [];
+    let carrinho = [];
+
+    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
+      .then(r => r.json())
+      .then(res => {
+        sabores = (res.values || []).map(l => ({
+          nome: l[0] || '',
+          descricao: l[1] || '',
+          categoria: l[2] || ''
+        }));
+        renderizarSabores();
+      });
+
+    function renderizarSabores() {
+      const container = document.getElementById("sabores");
+      container.innerHTML = '';
+      sabores.forEach((sabor, index) => {
+        const div = document.createElement("div");
+        div.className = "sabor";
+        div.innerHTML = `<strong>(${sabor.categoria}) ${sabor.nome}</strong><br><small>${sabor.descricao}</small>`;
+        div.onclick = () => toggleSelecao(index, div);
+        container.appendChild(div);
+      });
+    }
+
+    function toggleSelecao(index, elemento) {
+      const sabor = sabores[index];
+      const i = selecionados.indexOf(sabor);
+
+      if (i !== -1) {
+        selecionados.splice(i, 1);
+        elemento.classList.remove("selecionado");
+      } else {
+        if (selecionados.length >= 2) {
+          mostrarPopup("Você só pode escolher até 2 sabores.");
+          return;
+        }
+        selecionados.push(sabor);
+        elemento.classList.add("selecionado");
+      }
+      atualizarSelecionados();
+    }
+
+    function atualizarSelecionados() {
+      const div = document.getElementById("selecionados");
+      if (selecionados.length === 0) {
+        div.innerHTML = "";
+        return;
+      }
+      div.innerHTML = `Selecionado: ${selecionados.map(s => `(${s.categoria}) ${s.nome}`).join(" + ")}`;
+    }
+
+    function adicionarPizza() {
+      if (selecionados.length === 0) {
+        mostrarPopup("Escolha pelo menos 1 sabor.");
+        return;
+      }
+
+      const nome = `Pizza (${selecionados.map(s => `(${s.categoria}) ${s.nome}`).join(" + ")})`;
+      carrinho.push({ nome, preco: PRECO_PIZZA });
+      selecionados = [];
+      atualizarCarrinho();
+      renderizarSabores();
+      atualizarSelecionados();
+      mostrarPopup("Pizza adicionada ao carrinho!");
+    }
+
+    function atualizarCarrinho() {
+      const ul = document.getElementById("listaCarrinho");
+      ul.innerHTML = '';
+      let total = 0;
+      carrinho.forEach((item, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2)}`;
+        ul.appendChild(li);
+        total += item.preco;
+      });
+      document.getElementById("total").textContent = total.toFixed(2);
+    }
+
+    function avancar() {
+      if (carrinho.length === 0) {
+        mostrarPopup("Adicione uma pizza ao carrinho antes de avançar.");
+        return;
+      }
+      mostrarPopup("Você avançou para o próximo passo!");
+      // window.location.href = "proxima-etapa.html";
+    }
+function mostrarPopup(mensagem) {
+  document.getElementById("popupTexto").textContent = mensagem;
+  document.getElementById("popupAviso").style.display = "flex";
+}
+
+function fecharPopupAviso() {
+  document.getElementById("popupAviso").style.display = "none";
+}
+
+  </script>
+
+</body>
+</html>
