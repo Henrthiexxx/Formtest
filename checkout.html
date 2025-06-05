@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      background: #fff3e0;
+    }
+
+    h2 {
+      text-align: center;
+      color: #c0392b;
+    }
+
+    .checkout-container {
+      max-width: 600px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .pedido, .dados {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    ul {
+      padding-left: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: bold;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .resumo {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 0.8rem;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>Finalizar Pedido</h2>
+
+  <div class="checkout-container">
+    <!-- 📦 Resumo do Pedido -->
+    <div class="pedido">
+      <h3>Seu Pedido</h3>
+      <ul id="listaPedido"></ul>
+      <div class="resumo">Total: R$ <span id="totalPedido">0.00</span></div>
+    </div>
+
+    <!-- 📍 Endereço -->
+    <div class="dados">
+      <h3>Endereço para Entrega</h3>
+<label for="rua">Nome</label>
+      <input type="text" id="nome" required />
+      <label for="rua">Rua</label>
+      <input type="text" id="rua" required />
+
+      <label for="numero">Número</label>
+      <input type="text" id="numero" required />
+
+      <label for="referencia">Referência</label>
+      <input type="text" id="referencia" />
+
+      <label for="bairro">Bairro</label>
+      <select id="bairro" required>
+        <option value="">Selecione um bairro...</option>
+      </select>
+
+      <p class="resumo">Taxa de entrega: R$ <span id="taxaEntrega">0.00</span></p>
+    </div>
+
+    <button onclick="finalizarPedido()">📦 Finalizar Pedido</button>
+  </div>
+
+  <script>
+    const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
+    const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
+    const ABA_BAIRROS = "Bairros";
+
+    let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+    let taxaEntrega = 0;
+
+    function renderizarPedido() {
+      const ul = document.getElementById("listaPedido");
+      const totalEl = document.getElementById("totalPedido");
+      ul.innerHTML = '';
+      let total = 0;
+
+      carrinho.forEach(item => {
+        const li = document.createElement("li");
+        const qtd = item.qtd || 1;
+        const precoTotal = (item.preco || 0) * qtd;
+        li.textContent = `${item.nome} x${qtd} - R$ ${precoTotal.toFixed(2)}`;
+        ul.appendChild(li);
+        total += precoTotal;
+      });
+
+      totalEl.textContent = (total + taxaEntrega).toFixed(2);
+    }
+
+    function carregarBairros() {
+      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA_BAIRROS}!A2:B?key=${API_KEY}`)
+        .then(r => r.json())
+        .then(data => {
+          const lista = data.values || [];
+          const select = document.getElementById("bairro");
+          lista.forEach(([nome, valor]) => {
+            const opt = document.createElement("option");
+            opt.value = valor;
+            opt.textContent = nome;
+            select.appendChild(opt);
+          });
+
+          // Restaurar valores salvos
+          const salvos = JSON.parse(localStorage.getItem("dadosEntrega"));
+          if (salvos) {
+            document.getElementById("rua").value = salvos.rua || '';
+            document.getElementById("numero").value = salvos.numero || '';
+            document.getElementById("referencia").value = salvos.referencia || '';
+            document.getElementById("bairro").value = salvos.taxa || '';
+            taxaEntrega = parseFloat(salvos.taxa || 0);
+            document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
+            renderizarPedido();
+          }
+        });
+    }
+
+    document.getElementById("bairro").addEventListener("change", (e) => {
+      taxaEntrega = parseFloat(e.target.value || 0);
+      document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
+      renderizarPedido();
+    });
+
+    function finalizarPedido() {
+      const rua = document.getElementById("rua").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const referencia = document.getElementById("referencia").value.trim();
+      const taxa = taxaEntrega;
+
+      if (!rua || !numero || !taxa) {
+        alert("Preencha todos os campos obrigatórios.");
+        return;
+      }
+
+      const dadosEntrega = { rua, numero, referencia, taxa };
+      localStorage.setItem("dadosEntrega", JSON.stringify(dadosEntrega));
+      alert("Pedido finalizado com sucesso! 🎉");
+      // Aqui você pode redirecionar ou enviar para servidor
+    }
+
+    // Inicializar
+    carregarBairros();
+    renderizarPedido();
+  </script>
+</body>
+</html>
