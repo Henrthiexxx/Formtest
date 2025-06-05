@@ -136,3 +136,9 @@ h2 {
 .popup-btn:hover {
   background: #e74c3c;
 }
+.btn-add {
+  left: 0;
+  margin-left: 0;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
