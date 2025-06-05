@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu de Categorias</title>
+  <link rel="stylesheet" href="app-ui.css" />
+  <style>
+    /* Área dos botões centralizados */
+    .grid-menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      padding: 2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .menu-btn {
+      padding: 1rem;
+      background: #f0d878;
+      color: #0d0d0d;
+      border: none;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease;
+    }
+
+    .menu-btn:hover {
+      background: #e1c35f;
+    }
+
+    /* Valor fixo no topo */
+    #valorFixo {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: #fff8f0;
+      border: 1px solid #ccc;
+      padding: 0.6rem 1rem;
+      font-weight: bold;
+      font-size: 1.1rem;
+      z-index: 1000;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+
+    /* Botão de avançar fixo */
+    .btn-avancar {
+      position: fixed;
+      bottom: 1rem;
+      right: 0;
+      margin-right: 0;
+      background: #2ecc71;
+      color: white;
+      padding: 0.8rem 1.2rem;
+      border: none;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      z-index: 1000;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 📌 Menu de Categorias -->
+  <main>
+    <h2 style="text-align:center;">Escolha uma Categoria</h2>
+    <div class="grid-menu">
+      <button class="menu-btn" onclick="window.location.href='pizzag4.html'">Pizza 4 Sabores</button>
+      <button class="menu-btn" onclick="window.location.href='pizzag.html'">Pizza Grande</button>
+      <button class="menu-btn" onclick="window.location.href='pizza.html'">Pizza Média</button>
+      <button class="menu-btn" onclick="window.location.href='pizzap.html'">Pizza Pequena</button>
+      <button class="menu-btn" onclick="window.location.href='beverage.html'">Bebidas</button>
+      <!-- Botões adicionais editáveis -->
+      <button class="menu-btn">Categoria 6</button>
+      <button class="menu-btn">Categoria 7</button>
+      <button class="menu-btn">Categoria 8</button>
+    </div>
+  </main>
+
+  <!-- ✅ Botão Avançar -->
+  <button class="btn-avancar" onclick="avancar()">➡️ Avançar</button>
+
+  <!-- 🧠 Script de carregamento do valor -->
+  <script>
+function atualizarValorDoCarrinho() {
+  const carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+  let total = 0;
+  carrinho.forEach(item => {
+    const qtd = item.qtd || 1;
+    total += (item.preco || 0) * qtd;
+  });
+  const span = document.getElementById("cartTotalValor");
+  if (span) span.textContent = `R$ ${total.toFixed(2)}`;
+}
+
+// Atualizar ao carregar a página
+window.onload = () => {
+  atualizarValorDoCarrinho();
+};
+
+
+    function avancar() {
+      // Atualize o destino se necessário
+      window.location.href = "checkout.html";
+    }
+  </script>
+<!-- 🛒 Botão com valor -->
+<div class="cart-icon" onclick="abrirCarrinho()">
+  🛒 <span id="cartTotalValor">R$ 0,00</span>
+</div>
+
+
+<!-- 🛍️ MODAL DO CARRINHO -->
+<div id="carrinhoModal" class="carrinho-modal">
+  <div class="carrinho-conteudo">
+    <h3>Seu Carrinho</h3>
+    <ul id="listaCarrinho"></ul>
+    <div id="totalCarrinho">Total: R$ 0,00</div>
+    <button onclick="fecharCarrinho()" class="fechar-btn">Fechar</button>
+  </div>
+</div>
+
+<style>
+/* Carrinho flutuante */
+.cart-icon {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  background: #f0d878;
+  color: #000;
+  padding: 0.7rem 1rem;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,0,0,0.2);
+  z-index: 9999;
+}
+
+/* Modal carrinho */
+.carrinho-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.carrinho-conteudo {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  font-family: Arial, sans-serif;
+}
+
+.carrinho-conteudo ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+}
+
+.carrinho-conteudo li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.7rem;
+}
+
+.carrinho-conteudo li span {
+  flex: 1;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.quantidade-controles {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.quantidade-controles button {
+  background: #ccc;
+  border: none;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  border-radius: 4px;
+}
+
+.fechar-btn {
+  background: #c0392b;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+</style>
+
+<script>
+// Carrinho dinâmico
+function abrirCarrinho() {
+  document.getElementById("carrinhoModal").style.display = "flex";
+  atualizarCarrinhoUI();
+}
+
+function fecharCarrinho() {
+  document.getElementById("carrinhoModal").style.display = "none";
+}
+
+function atualizarCarrinhoUI() {
+  const ul = document.getElementById("listaCarrinho");
+  const totalEl = document.getElementById("totalCarrinho");
+  ul.innerHTML = '';
+  let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+  let total = 0;
+
+  carrinho.forEach((item, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <span>${item.nome}</span>
+      <div class="quantidade-controles">
+        <button onclick="alterarQtd(${i}, -1)">➖</button>
+        <span>${item.qtd || 1}</span>
+        <button onclick="alterarQtd(${i}, 1)">➕</button>
+        <button onclick="removerItem(${i})">🗑</button>
+      </div>
+    `;
+    ul.appendChild(li);
+    total += (item.preco || 0) * (item.qtd || 1);
+  });
+
+  totalEl.textContent = `Total: R$ ${total.toFixed(2)}`;
+}
+
+function alterarQtd(index, delta) {
+  let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+  if (!carrinho[index].qtd) carrinho[index].qtd = 1;
+  carrinho[index].qtd += delta;
+  if (carrinho[index].qtd < 1) carrinho[index].qtd = 1;
+  localStorage.setItem("carrinhoGlobal", JSON.stringify(carrinho));
+  atualizarCarrinhoUI();
+}
+
+function removerItem(index) {
+  let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+  carrinho.splice(index, 1);
+  localStorage.setItem("carrinhoGlobal", JSON.stringify(carrinho));
+  atualizarCarrinhoUI();
+}
+</script>
+
+</body>
+</html>
