@@ -93,8 +93,20 @@ h2 {
 
 
 .btn-avancar {
-  right: 1rem;
-  background: #2ecc71;
+  position: fixed;
+  bottom: 1rem;
+  right: 0; /* cola no canto direito */
+  margin-right: 0;
+  background: #2ecc71; /* verde */
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  cursor: pointer;
 }
 
 /* Popup */
@@ -141,4 +153,8 @@ h2 {
   margin-left: 0;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+.btn-avancar {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
