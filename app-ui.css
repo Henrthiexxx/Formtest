@@ -2,6 +2,7 @@ body {
   font-family: Arial, sans-serif;
   padding: 1rem;
   background: #fff3e0;
+  margin-bottom: 6rem;
 }
 
 h2 {
@@ -23,69 +24,16 @@ h2 {
   background: #ffe6e0;
 }
 
-button {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 6px;
-  border: none;
-}
-
-.botao-voltar {
-  position: fixed;
-  bottom: 1rem;
-  left: 1rem;
-  background: #e74c3c;
-  color: white;
-  font-weight: bold;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  z-index: 999;
-  border: none;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-}
-
-.botao-azul {
-  background-color: #3498db;
-  color: white;
-}
-
-.botao-verde {
-  background-color: #27ae60;
-  color: white;
-}
-
 #sabores {
   margin-bottom: 1rem;
 }
 
 #painelSelecionado {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   background: #fff8f0;
   border: 1px solid #ccc;
   padding: 1rem;
   border-radius: 8px;
   margin-bottom: 1rem;
-}
-
-#painelSelecionado .acoes {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-@media (min-width: 500px) {
-  #painelSelecionado {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  #painelSelecionado .acoes {
-    flex-direction: row;
-  }
 }
 
 #valorFixo {
@@ -94,16 +42,55 @@ button {
   right: 10px;
   background: #fff8f0;
   border: 1px solid #ccc;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   font-weight: bold;
+  font-size: 1.1rem;
   z-index: 1000;
   border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
 }
 
 #carrinho ul {
   padding-left: 1.2rem;
 }
 
+/* Botões flutuantes */
+.btn-fix {
+  position: fixed;
+  bottom: 1rem;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease;
+}
+
+.btn-fix:hover {
+  transform: scale(1.05);
+}
+
+.btn-voltar {
+  left: 1rem;
+  background: #e74c3c;
+}
+
+.btn-add {
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3498db;
+}
+
+.btn-avancar {
+  right: 1rem;
+  background: #2ecc71;
+}
+
+/* Popup */
 #popupAviso {
   display: none;
   position: fixed;
@@ -136,6 +123,7 @@ button {
   padding: 0.6rem 1.2rem;
   border-radius: 8px;
   font-size: 1rem;
+  border: none;
 }
 
 .popup-btn:hover {
