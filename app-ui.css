@@ -75,10 +75,22 @@ h2 {
 }
 
 .btn-add {
-  left: 50%;
-  transform: translateX(-50%);
-  background: #3498db;
+  position: fixed;
+  bottom: 1rem;
+  left: 0; /* cola no canto esquerdo */
+  margin-left: 0;
+  background: #3498db; /* azul */
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 1000;
+  cursor: pointer;
 }
+
 
 .btn-avancar {
   right: 1rem;
