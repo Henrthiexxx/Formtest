@@ -5,33 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Catálogo</title>
   <style>
+    :root {
+      --bg: #0d0d0d;
+      --gold: #f0d878;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-color: #0d0d0d;
-      color: #f0d878;
-      min-height: 100vh;
+      background-color: var(--bg);
+      color: var(--gold);
     }
 
     .catalog-container {
       display: flex;
-      justify-content: flex-end;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
-      padding-right: 2rem;
-      background-color: #0d0d0d;
+      min-height: 100vh;
+      background-color: var(--bg);
       background-size: cover;
       background-position: center;
       transition: background-image 0.4s ease-in-out, opacity 0.3s ease-in-out;
-      position: relative;
-      opacity: 1;
+      padding: 1.5rem;
+      text-align: center;
     }
 
     .catalog-title {
-      position: absolute;
-      left: 2rem;
-      top: 3rem;
-      color: #f0d878;
+      margin-bottom: 2rem;
+    }
+
+    .catalog-title h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .catalog-title p {
+      margin: 0.5rem 0 0;
+      font-size: 1rem;
+      color: #f0d878aa;
     }
 
     .catalog-menu {
@@ -39,17 +54,18 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      width: 220px;
+      width: 100%;
+      max-width: 320px;
       padding: 0;
     }
 
     .menu-item {
       background-color: rgba(17, 17, 17, 0.8);
       border: 2px solid #f0d87888;
-      color: #f0d878;
+      color: var(--gold);
       padding: 1rem;
       text-align: center;
-      font-size: 1rem;
+      font-size: 1.1rem;
       border-radius: 10px;
       cursor: pointer;
       transition: all 0.3s ease;
@@ -59,7 +75,7 @@
       background-color: #222;
       color: #fff;
       font-weight: bold;
-      border-color: #f0d878;
+      border-color: var(--gold);
       box-shadow: 0 0 12px #f0d878aa;
     }
 
@@ -71,8 +87,8 @@
     }
 
     .cart-btn {
-      background-color: #f0d878;
-      color: #0d0d0d;
+      background-color: var(--gold);
+      color: var(--bg);
       border: none;
       padding: 0.7rem 1.2rem;
       border-radius: 8px;
@@ -80,6 +96,7 @@
       cursor: pointer;
       box-shadow: 0 0 10px #00000088;
       transition: transform 0.2s ease;
+      font-size: 1rem;
     }
 
     .cart-btn:hover {
@@ -102,26 +119,43 @@
     .popup-content {
       background-color: #1a1a1a;
       padding: 2rem;
-      border: 2px solid #f0d878;
-      color: #f0d878;
+      border: 2px solid var(--gold);
+      color: var(--gold);
       border-radius: 10px;
       text-align: center;
+      max-width: 90%;
     }
 
     .popup-content button {
       margin-top: 1rem;
       background-color: transparent;
-      color: #f0d878;
-      border: 2px solid #f0d878;
-      padding: 0.5rem 1rem;
+      color: var(--gold);
+      border: 2px solid var(--gold);
+      padding: 0.5rem 1.2rem;
       border-radius: 6px;
       cursor: pointer;
       transition: background 0.3s ease;
     }
 
     .popup-content button:hover {
-      background-color: #f0d878;
-      color: #0d0d0d;
+      background-color: var(--gold);
+      color: var(--bg);
+    }
+
+    @media (min-width: 600px) {
+      .catalog-container {
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        padding-right: 2rem;
+        text-align: left;
+      }
+
+      .catalog-title {
+        position: absolute;
+        left: 2rem;
+        top: 3rem;
+      }
     }
   </style>
 </head>
@@ -139,11 +173,11 @@
     </div>
 
     <ul class="catalog-menu">
-      <li class="menu-item" data-bg="https://alegrafoods.com.br/wp-content/uploads/2020/07/9-img-blog.png" onclick="showComingSoon()">🍕 Pizzas</li>
-      <li class="menu-item" data-bg="https://images.unsplash.com/photo-1562967916-eb82221dfb44?auto=format&fit=crop&w=1400&q=80" onclick="showComingSoon()">🍟 Porções</li>
+<li class="menu-item" data-bg="https://raw.githubusercontent.com/Henrthiexxx/Formtest/main/pizza.png" onclick="navigate('pizza.html')">🍕 Pizzas</li>
+      <li class="menu-item" data-bg="https://images.unsplash.com/photo-1562967916-eb82221dfb44?auto=format&fit=crop&w=1400&q=80" onclick="navigate('porcoes.html')">🍟 Porções</li>
       <li class="menu-item" data-bg="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?auto=format&fit=crop&w=1400&q=80" onclick="showComingSoon()">🛒 Conveniência</li>
       <li class="menu-item" data-bg="https://images.unsplash.com/photo-1604916280882-6f3e1b259bb2?auto=format&fit=crop&w=1400&q=80" onclick="showComingSoon()">🥤 Bebidas</li>
-      <li class="menu-item" data-bg="https://images.unsplash.com/photo-1612203574798-f3b3795a6f6f?auto=format&fit=crop&w=1400&q=80" onclick="showComingSoon()">🚬 Tabacaria</li>
+      <li class="menu-item" data-bg="https://raw.githubusercontent.com/Henrthiexxx/Formtest/main/tab.png" onclick="navigate('tab.html')">🚬 Tabacaria</li>
     </ul>
   </main>
 
@@ -165,7 +199,11 @@
     }
 
     function goToCart() {
-      alert("Redirecionando para o carrinho...");
+      window.location.href = "carrinho.html";
+    }
+
+    function navigate(page) {
+      window.location.href = page;
     }
 
     // Troca dinâmica com fade-in
@@ -173,14 +211,12 @@
       item.addEventListener('mouseenter', () => {
         const bg = item.dataset.bg;
         if (!bg) return;
-
         const container = document.getElementById('catalog');
-        container.style.opacity = 0;
-
+        container.style.opacity = 0.5;
         setTimeout(() => {
           container.style.backgroundImage = `url('${bg}')`;
           container.style.opacity = 1;
-        }, 200);
+        }, 150);
       });
     });
   </script>
