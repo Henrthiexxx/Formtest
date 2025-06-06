@@ -101,85 +101,112 @@
     <button onclick="finalizarPedido()">📦 Finalizar Pedido</button>
   </div>
 
-  <script>
-    const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
-    const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
-    const ABA_BAIRROS = "Bairros";
+<script>
+  const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
+  const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
+  const ABA_BAIRROS = "Bairros";
 
-    let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
-    let taxaEntrega = 0;
+  let carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+  let taxaEntrega = 0;
 
-    function renderizarPedido() {
-      const ul = document.getElementById("listaPedido");
-      const totalEl = document.getElementById("totalPedido");
-      ul.innerHTML = '';
-      let total = 0;
+  function renderizarPedido() {
+    const ul = document.getElementById("listaPedido");
+    const totalEl = document.getElementById("totalPedido");
+    ul.innerHTML = '';
+    let total = 0;
 
-      carrinho.forEach(item => {
-        const li = document.createElement("li");
-        const qtd = item.qtd || 1;
-        const precoTotal = (item.preco || 0) * qtd;
-        li.textContent = `${item.nome} x${qtd} - R$ ${precoTotal.toFixed(2)}`;
-        ul.appendChild(li);
-        total += precoTotal;
-      });
-
-      totalEl.textContent = (total + taxaEntrega).toFixed(2);
-    }
-
-    function carregarBairros() {
-      fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA_BAIRROS}!A2:B?key=${API_KEY}`)
-        .then(r => r.json())
-        .then(data => {
-          const lista = data.values || [];
-          const select = document.getElementById("bairro");
-          lista.forEach(([nome, valor]) => {
-            const opt = document.createElement("option");
-            opt.value = valor;
-            opt.textContent = nome;
-            select.appendChild(opt);
-          });
-
-          // Restaurar valores salvos
-          const salvos = JSON.parse(localStorage.getItem("dadosEntrega"));
-          if (salvos) {
-            document.getElementById("rua").value = salvos.rua || '';
-            document.getElementById("numero").value = salvos.numero || '';
-            document.getElementById("referencia").value = salvos.referencia || '';
-            document.getElementById("bairro").value = salvos.taxa || '';
-            taxaEntrega = parseFloat(salvos.taxa || 0);
-            document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
-            renderizarPedido();
-          }
-        });
-    }
-
-    document.getElementById("bairro").addEventListener("change", (e) => {
-      taxaEntrega = parseFloat(e.target.value || 0);
-      document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
-      renderizarPedido();
+    carrinho.forEach(item => {
+      const li = document.createElement("li");
+      const qtd = item.qtd || 1;
+      const precoTotal = (item.preco || 0) * qtd;
+      li.textContent = `${item.nome} x${qtd} - R$ ${precoTotal.toFixed(2)}`;
+      ul.appendChild(li);
+      total += precoTotal;
     });
 
-    function finalizarPedido() {
-      const rua = document.getElementById("rua").value.trim();
-      const numero = document.getElementById("numero").value.trim();
-      const referencia = document.getElementById("referencia").value.trim();
-      const taxa = taxaEntrega;
+    totalEl.textContent = (total + taxaEntrega).toFixed(2);
+  }
 
-      if (!rua || !numero || !taxa) {
-        alert("Preencha todos os campos obrigatórios.");
-        return;
-      }
+  function carregarBairros() {
+    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA_BAIRROS}!A2:B?key=${API_KEY}`)
+      .then(r => r.json())
+      .then(data => {
+        const lista = data.values || [];
+        const select = document.getElementById("bairro");
+        lista.forEach(([nome, valor]) => {
+          const opt = document.createElement("option");
+          opt.value = valor;
+          opt.textContent = nome;
+          select.appendChild(opt);
+        });
 
-      const dadosEntrega = { rua, numero, referencia, taxa };
-      localStorage.setItem("dadosEntrega", JSON.stringify(dadosEntrega));
-      alert("Pedido finalizado com sucesso! 🎉");
-      // Aqui você pode redirecionar ou enviar para servidor
+        const salvos = JSON.parse(localStorage.getItem("dadosEntrega"));
+        if (salvos) {
+          document.getElementById("nome").value = salvos.nome || '';
+          document.getElementById("rua").value = salvos.rua || '';
+          document.getElementById("numero").value = salvos.numero || '';
+          document.getElementById("referencia").value = salvos.referencia || '';
+          document.getElementById("bairro").value = salvos.taxa || '';
+          taxaEntrega = parseFloat(salvos.taxa || 0);
+          document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
+          renderizarPedido();
+        }
+      });
+  }
+
+  document.getElementById("bairro").addEventListener("change", (e) => {
+    taxaEntrega = parseFloat(e.target.value || 0);
+    document.getElementById("taxaEntrega").textContent = taxaEntrega.toFixed(2);
+    renderizarPedido();
+  });
+
+  function finalizarPedido() {
+    const nome = document.getElementById("nome").value.trim();
+    const rua = document.getElementById("rua").value.trim();
+    const numero = document.getElementById("numero").value.trim();
+    const referencia = document.getElementById("referencia").value.trim();
+    const bairroSelect = document.getElementById("bairro");
+    const bairroNome = bairroSelect.options[bairroSelect.selectedIndex]?.text;
+    const taxa = taxaEntrega;
+
+    if (!nome || !rua || !numero || !taxa || bairroSelect.selectedIndex === 0) {
+      alert("Preencha todos os campos obrigatórios.");
+      return;
     }
 
-    // Inicializar
-    carregarBairros();
-    renderizarPedido();
-  </script>
+    const dadosEntrega = { nome, rua, numero, referencia, taxa, bairro: bairroNome };
+    localStorage.setItem("dadosEntrega", JSON.stringify(dadosEntrega));
+
+    let mensagem = `🛒 *Pedido via site:*\n\n`;
+    let total = 0;
+
+    carrinho.forEach((item, i) => {
+      const qtd = item.qtd || 1;
+      const subtotal = (item.preco || 0) * qtd;
+      mensagem += `• ${item.nome} x${qtd} - R$ ${subtotal.toFixed(2)}\n`;
+      total += subtotal;
+    });
+
+    mensagem += `\n📦 *Taxa de entrega:* R$ ${taxa.toFixed(2)}`;
+    mensagem += `\n💰 *Total:* R$ ${(total + taxa).toFixed(2)}\n`;
+
+    mensagem += `\n👤 *Cliente:* ${nome}`;
+    mensagem += `\n📍 *Endereço:*\n${rua}, Nº ${numero}`;
+    if (referencia) mensagem += `\nRef: ${referencia}`;
+    mensagem += `\nBairro: ${bairroNome}`;
+
+    alert("Pedido finalizado com sucesso! 🎉 Redirecionando para o WhatsApp...");
+
+    const numeroWhats = "5566996455672";
+    const link = `https://wa.me/${numeroWhats}?text=${encodeURIComponent(mensagem)}`;
+
+    localStorage.removeItem("carrinhoGlobal");
+    window.location.href = link;
+  }
+
+  carregarBairros();
+  renderizarPedido();
+</script>
+
 </body>
 </html>
