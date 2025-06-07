@@ -1,60 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Select Your Beverages</title>
-  <link rel="stylesheet" href="https://henrthiexxx.github.io/Formtest/style.css">
+  <title>Selecionar Bebidas</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 1rem; background: #fffbe6; }
+    h2 { color: #c0392b; }
+    .btn-option {
+      display: block;
+      margin: 0.5rem 0;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background: #27ae60;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h2>🥤 Select Your Beverages</h2>
-  <form onsubmit="saveBeverages(); return false;">
-    <div class="section" id="beverageGroup">
-      <!-- You can duplicate or edit these blocks as needed -->
-      <label class="btn-option">
-        <input type="checkbox" name="beverage" value="Coca-Cola 2L">
-        Coca-Cola 2L
-      </label>
-      <label class="btn-option">
-        <input type="checkbox" name="beverage" value="Guaraná 1L">
-        Guaraná 1L
-      </label>
-      <label class="btn-option">
-        <input type="checkbox" name="beverage" value="Orange Juice">
-        Orange Juice
-      </label>
-    </div>
 
-    <!-- Action buttons -->
-    <div style="display: flex; gap: 10px; margin-top: 20px;">
-      <button type="submit">💾 Save Beverages</button>
-      <button type="button" onclick="window.location.href='index.html'">🏠 Back to Home</button>
-      <button type="button" onclick="window.location.href='carrinho.html'">🛒 Go to Cart</button>
-    </div>
-  </form>
+  <h2>🥤 Selecione suas bebidas</h2>
+  <div id="bebidas"></div>
 
-  <!-- JavaScript to save selected beverages to localStorage -->
-  <script>
-    function saveBeverages() {
-      const selected = [...document.querySelectorAll('input[name="beverage"]:checked')].map(e => e.value);
-      localStorage.setItem('selectedBeverages', JSON.stringify(selected));
-      alert('Beverages saved!');
-    }
+  <button onclick="salvarBebidas()">💾 Salvar e voltar</button>
 
-    // Load saved beverages if available
-    window.onload = () => {
-      const saved = JSON.parse(localStorage.getItem('selectedBeverages')) || [];
-      saved.forEach(name => {
-        const input = [...document.querySelectorAll('input[name="beverage"]')].find(e => e.value === name);
-        if (input) input.checked = true;
+<script>
+  const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4";
+  const SHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA";
+  const ABA = "Bebidas";
+
+async function carregarBebidas() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${ABA}!A2:E?key=${API_KEY}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Erro na requisição: ${res.status}`);
+    const data = await res.json();
+    const linhas = data.values || [];
+
+    console.log("Linhas carregadas:", linhas); // debug
+
+    const container = document.getElementById("bebidas");
+    container.innerHTML = ''; // limpar
+
+    linhas.forEach((linha, i) => {
+      const status = (linha[4] || '').toLowerCase();
+      if (status !== 'ativo') return;
+
+      const nome = linha[0] || `Sem nome (${i + 1})`;
+      let precoTexto = linha[2] || "0";
+      
+      // Limpar preço (remover "R$", espaços, e lidar com vírgulas/pontos)
+      precoTexto = precoTexto.replace(/[^\d,.]/g, '').replace(',', '.');
+      const preco = parseFloat(precoTexto) || 0;
+
+      const id = `bebida_${i}`;
+      const label = document.createElement("label");
+      label.className = "btn-option";
+      label.innerHTML = `
+        <input type="checkbox" id="${id}" data-nome="${nome}" data-preco="${preco}" />
+        ${nome} - R$ ${preco.toFixed(2).replace('.', ',')}
+      `;
+      container.appendChild(label);
+    });
+  } catch (error) {
+    console.error("Erro ao carregar bebidas:", error);
+    document.getElementById("bebidas").innerHTML = "<p>Erro ao carregar bebidas. Verifique a planilha ou a conexão.</p>";
+  }
+}
+
+  function salvarBebidas() {
+    const selecionadas = [];
+    document.querySelectorAll("#bebidas input:checked").forEach(input => {
+      selecionadas.push({
+        nome: input.dataset.nome,
+        preco: parseFloat(input.dataset.preco),
+        qtd: 1
       });
-    };
-  </script>
+    });
 
-  <!--
-    🛠️ GUIDE FOR CUSTOMIZATION:
-    - To change the beverage name, edit the <label> text and the input value.
-    - To add more options, duplicate the <label> blocks inside #beverageGroup.
-    - To change button destinations, edit window.location.href values.
-  -->
+    const carrinho = JSON.parse(localStorage.getItem("carrinhoGlobal")) || [];
+    carrinho.push(...selecionadas);
+    localStorage.setItem("carrinhoGlobal", JSON.stringify(carrinho));
+    alert("Bebidas adicionadas ao carrinho!");
+    window.location.href = "catalog.html";
+  }
+
+  carregarBebidas();
+</script>
+
 </body>
 </html>
