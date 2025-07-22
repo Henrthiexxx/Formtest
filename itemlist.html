@@ -1,507 +1,140 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta http-equiv="refresh" content="300">
+  <meta http-equiv="refresh" content="600">
   <meta charset="UTF-8">
-  <title>Carrinho de Compras</title>
-  <style>
-    /* --- CSS EMBUTIDO --- */
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
-      color: #333;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      border-bottom: 2px solid #007bff;
-      padding-bottom: 5px;
-      color: #007bff;
-    }
-
-    input, button {
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      margin: 5px 0;
-      box-sizing: border-box; /* Garante que padding não afete a largura total */
-    }
-    
-    input {
-      width: 100%;
-    }
-
-    button {
-      cursor: pointer;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      transition: background-color 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-
-    .botoes-acao {
-        margin-top: 15px;
-    }
-
-    .botoes-acao button, .botoes-popup button {
-      width: auto;
-      margin: 5px;
-    }
-
-    .botoes-acao button:nth-child(2) { background-color: #dc3545; }
-    .botoes-acao button:nth-child(2):hover { background-color: #c82333; }
-    .botoes-acao button:nth-child(3) { background-color: #ffc107; color: #333; }
-    .botoes-acao button:nth-child(3):hover { background-color: #e0a800; }
-    .botoes-acao button:nth-child(4) { background-color: #28a745; }
-    .botoes-acao button:nth-child(4):hover { background-color: #218838; }
-
-
-    #sugestoes {
-      background: #fff;
-      border: 1px solid #ccc;
-      max-height: 200px;
-      overflow-y: auto;
-      border-top: none;
-    }
-
-    .sugestao {
-      padding: 8px;
-      cursor: pointer;
-    }
-
-    .sugestao:hover {
-      background: #eee;
-    }
-
-    #detalheProduto, #resultadoCodigo {
-      margin-top: 15px;
-      padding: 10px;
-      background: #e9ecef;
-      border-radius: 5px;
-    }
-
-    #carrinho {
-        list-style: none;
-        padding: 0;
-    }
-
-    #carrinho li {
-      margin: 8px 0;
-      padding: 10px;
-      background: #f8f9fa;
-      border-radius: 3px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-left: 4px solid #007bff;
-    }
-
-    #carrinho button {
-        background: #dc3545;
-        color: white;
-        padding: 5px 8px;
-        width: auto;
-        font-size: 12px;
-    }
-
-    #total {
-      font-weight: bold;
-      font-size: 1.2em;
-      margin-top: 15px;
-      text-align: right;
-      color: #28a745;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .popup-content {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      width: 90%;
-      max-width: 500px;
-      box-shadow: 0 0 15px #000;
-    }
-
-    #vendasTexto {
-      max-height: 300px;
-      overflow: auto;
-      white-space: pre-wrap;
-      background: #f4f4f4;
-      padding: 10px;
-      border: 1px solid #ccc;
-    }
-
-    .botoes-pagamento {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    .botoes-pagamento button {
-        width: 100%;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Vendas</title>
+  <!-- Link para o arquivo de estilos CSS externo -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h2>🛒 Buscar por Nome (F2)</h2>
-    <input type="text" id="busca" placeholder="Digite o nome do produto..." oninput="mostrarSugestoes()">
-    <div id="sugestoes"></div>
 
-    <div id="detalheProduto"></div>
+  <!-- BOTÃO DE CONFIGURAÇÕES -->
+  <div id="settings-button" onclick="abrirConfig()">⚙️</div>
 
-    <h2>🔢 Buscar por Código (F3)</h2>
-    <input type="number" id="buscaCodigo" placeholder="Digite o código..." oninput="iniciarBuscaCodigo()">
-    <div id="resultadoCodigo"></div>
+  <!-- ESTRUTURA PRINCIPAL -->
+  <main class="main-container">
+    <!-- PAINEL DA ESQUERDA (BUSCA) -->
+    <div class="left-panel">
+      <div class="search-section">
+        <h2>🛒 Buscar por Nome (F2)</h2>
+        <input type="text" id="busca" placeholder="Digite o nome do produto..." oninput="mostrarSugestoes()">
+        <div id="sugestoes"></div>
+        <div id="detalheProduto"></div>
+      </div>
 
-    <h2>🧾 Lista de Compras</h2>
-    <ul id="carrinho"></ul>
-    <p id="total">Total: R$ 0,00</p>
-
-    <div class="botoes-acao">
-      <button onclick="enviarLista()">📤 Enviar Lista</button>
-      <button onclick="limparCarrinho()">🧹 Limpar Carrinho</button>
-      <button onclick="verVendas()">📋 Ver Vendas</button>
-      <button onclick="salvarVenda()">💾 Registrar Venda</button>
+      <div class="search-section">
+        <h2>🔢 Buscar por Código (F3)</h2>
+        <input type="number" id="buscaCodigo" placeholder="Digite o código..." oninput="iniciarBuscaCodigo()">
+        <div id="resultadoCodigo"></div>
+      </div>
     </div>
-  </div>
 
+    <!-- PAINEL DA DIREITA (CARRINHO) -->
+    <div class="right-panel">
+      <div id="carrinho-container">
+        <h2>🧾 Lista de Compras</h2>
+        <ul id="carrinho"></ul>
+      </div>
+      <div id="total-container">
+        <label>TOTAL</label>
+        <div id="total">R$ 0,00</div>
+        <div class="botoes-acao">
+          <button onclick="salvarVenda()" style="background-color: #28a745;">💾 Registrar Venda</button>
+          <button onclick="limparCarrinho()" style="background-color: #dc3545;">🧹 Limpar Carrinho</button>
+          <button onclick="verVendas()" style="background-color: #ffc107; color: #333;">📋 Ver Vendas</button>
+          <button onclick="enviarLista()">📤 Enviar Lista</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- POPUP DE VENDAS SALVAS -->
   <div id="popupVendas" class="popup">
     <div class="popup-content">
       <h3>🧾 Vendas Salvas</h3>
       <pre id="vendasTexto"></pre>
-      <div class="botoes-popup" style="text-align: right;">
-        <button onclick="baixarVendas()">💾 Salvar</button>
+      <div class="botoes-popup">
+        <button onclick="baixarVendas()">💾 Baixar</button>
         <button onclick="limparVendas()" style="background-color: #dc3545;">🧹 Limpar</button>
-        <button onclick="fecharPopup()" style="background-color: #6c757d;">❌ Fechar</button>
+        <button onclick="fecharPopups()" style="background-color: #6c757d;">❌ Fechar</button>
       </div>
     </div>
   </div>
 
+  <!-- POPUP DE PAGAMENTO -->
   <div id="popupPagamento" class="popup">
     <div class="popup-content" style="max-width: 300px;">
         <h3>💰 Forma de Pagamento</h3>
-        <p>Escolha ou pressione o número correspondente:</p>
-        <div class="botoes-pagamento">
-          <button onclick="finalizarVenda('Dinheiro')"> [1] 💵 Dinheiro</button>
-          <button onclick="finalizarVenda('Pix')"> [2] 📲 Pix</button>
-          <button onclick="finalizarVenda('Crédito')"> [3] 💳 Crédito</button>
-          <button onclick="finalizarVenda('Débito')"> [4] 🏧 Débito</button>
+        <p>Escolha ou pressione o número:</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+          <button onclick="finalizarVenda('Dinheiro')">[1] 💵 Dinheiro</button>
+          <button onclick="finalizarVenda('Pix')">[2] 📲 Pix</button>
+          <button onclick="finalizarVenda('Crédito')">[3] 💳 Crédito</button>
+          <button onclick="finalizarVenda('Débito')">[4] 🏧 Débito</button>
         </div>
     </div>
   </div>
 
-  <script>
-    // --- JAVASCRIPT EMBUTIDO ---
-    const API_KEY = "AIzaSyDBdfuNCfQcxINcNmAt70gWJAAVNXEBua4"; // Sua chave de API do Google
-    const SPREADSHEET_ID = "1mV3hHTS9U8Z9zXFJ9UK0cMJ3kpZPGHe4VIldDv6nOdA"; // ID da sua planilha
-    const ABA = "Products"; // Nome da aba com os produtos
-    let produtos = [], carrinho = [];
-    let timerInatividadeBusca, timerInatividadeCodigo;
-    const TEMPO_INATIVIDADE = 5 * 60 * 1000; // 5 minutos
-
-    // --- CARREGAMENTO INICIAL DOS PRODUTOS ---
-    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${ABA}!A2:C?key=${API_KEY}`)
-      .then(r => r.json())
-      .then(res => {
-        produtos = (res.values || [])
-          .filter(l => l[0] && l[0].trim())
-          .map(l => {
-            const precoBruto = (l[2] || '').replace(/[^\d,.-]/g, '').replace(',', '.');
-            const preco = parseFloat(precoBruto);
-            return {
-              nome: l[0].trim(),
-              codigo: l[1],
-              preco: isNaN(preco) ? 0 : preco
-            };
-          });
-      })
-      .catch(error => {
-          console.error('Erro ao buscar dados da planilha:', error);
-          alert("Erro ao carregar os produtos da planilha. Verifique a chave de API, o ID da planilha e a conexão com a internet.");
-      });
-
-    // --- FUNÇÕES DE BUSCA DE PRODUTOS ---
-    function mostrarSugestoes() {
-      clearTimeout(timerInatividadeBusca);
-      const termo = document.getElementById('busca').value.toLowerCase();
-      const div = document.getElementById('sugestoes');
-      div.innerHTML = '';
-      document.getElementById('detalheProduto').innerHTML = '';
-
-      if (!termo) return;
-
-      const sugestoes = produtos.filter(p => p.nome.toLowerCase().includes(termo));
-      
-      sugestoes.forEach(p => {
-        const el = document.createElement('div');
-        el.className = 'sugestao';
-        el.textContent = p.nome;
-        el.onclick = () => selecionarProduto(p);
-        div.appendChild(el);
-      });
-      
-      timerInatividadeBusca = setTimeout(limparBuscaNome, TEMPO_INATIVIDADE);
-    }
-
-    function selecionarProduto(produto) {
-      document.getElementById('sugestoes').innerHTML = '';
-      document.getElementById('busca').value = produto.nome;
-      const div = document.getElementById('detalheProduto');
-      div.innerHTML = `
-        <p><strong>${produto.nome}</strong> - R$ ${produto.preco.toFixed(2)}</p>
-        <div style="display: flex; align-items: center; gap: 10px;">
-            <input type="number" id="quantidade" value="1" min="1" style="width: 70px;">
-            <button onclick="adicionarCarrinho('${produto.nome}', ${produto.preco})">Adicionar</button>
+  <!-- POPUP DE CONFIGURAÇÕES -->
+  <div id="popupConfig" class="popup">
+    <div class="popup-content">
+      <h3>⚙️ Configurações</h3>
+      <form id="config-form">
+        <div class="form-group">
+          <label for="theme-toggle">Aparência</label>
+          <button type="button" id="theme-toggle" onclick="toggleDarkMode()">Alternar Modo Escuro/Claro</button>
         </div>
-      `;
-      document.getElementById('quantidade').focus();
-    }
+        <div class="form-group">
+          <label for="resolucao">Resolução (Zoom)</label>
+          <select id="resolucao" onchange="mudarResolucao(this)">
+            <option value="0.8">80%</option>
+            <option value="0.9">90%</option>
+            <option value="1" selected>100% (Padrão)</option>
+            <option value="1.1">110%</option>
+            <option value="1.2">120%</option>
+          </select>
+        </div>
+        <div class="botoes-popup">
+            <button type="button" onclick="fecharPopups()" style="background-color: #6c757d;">❌ Fechar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-    let timeoutBuscaCodigo = null;
-    function iniciarBuscaCodigo() {
-      clearTimeout(timeoutBuscaCodigo);
-      clearTimeout(timerInatividadeCodigo);
-      timeoutBuscaCodigo = setTimeout(buscarPorCodigo, 300); // tempo de espera reduzido para agilidade
-    }
+<!-- Link para o arquivo JavaScript externo -->
+<script src="script.js"></script>
 
-    function buscarPorCodigo() {
-      const codigoInput = document.getElementById('buscaCodigo');
-      const codigo = codigoInput.value.trim();
-      const div = document.getElementById('resultadoCodigo');
+<marquee behavior="scroll" direction="left" style="position: fixed; bottom: 0; width: 100%; background: #000; color: #fff; padding: 5px; font-size: 14px; border-top: 1px solid #444;" id="marquee-info">
+  Última venda: -- | Total de vendas: -- | Produto mais vendido: -- | Último produto vendido: --
+</marquee>
 
-      if (!codigo) {
-          div.innerHTML = '';
-          return;
-      }
+<script>
+  function atualizarMarqueeInfo() {
+    const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
+    if (vendas.length === 0) return;
 
-      const produto = produtos.find(p => String(p.codigo).trim() === codigo);
+    const ultimaVenda = vendas[vendas.length - 1];
+    const hora = ultimaVenda.data;
+    const totalDia = vendas.reduce((s, v) => s + v.total, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-      if (produto) {
-        adicionarCarrinho(produto.nome, produto.preco, 1);
-        limparBuscaCodigo();
-        codigoInput.focus();
-      } else {
-        div.innerHTML = '<p style="color: red;">Produto não encontrado.</p>';
-      }
-      
-      timerInatividadeCodigo = setTimeout(limparBuscaCodigo, TEMPO_INATIVIDADE);
-    }
-
-    function limparBuscaNome() {
-        document.getElementById('busca').value = '';
-        document.getElementById('sugestoes').innerHTML = '';
-        document.getElementById('detalheProduto').innerHTML = '';
-    }
-
-    function limparBuscaCodigo() {
-      document.getElementById('buscaCodigo').value = '';
-      document.getElementById('resultadoCodigo').innerHTML = '';
-    }
-
-    // --- FUNÇÕES DO CARRINHO ---
-    function adicionarCarrinho(nome, preco, qtde = null) {
-      const quantidadeInput = document.getElementById('quantidade');
-      const quantidade = qtde !== null ? qtde : parseInt(quantidadeInput?.value || 1);
-
-      if (isNaN(quantidade) || quantidade < 1) {
-          alert("Por favor, insira uma quantidade válida.");
-          return;
-      }
-      
-      const itemExistente = carrinho.find(item => item.nome === nome);
-
-      if (itemExistente) {
-          itemExistente.quantidade += quantidade;
-      } else {
-          carrinho.push({ nome, preco, quantidade });
-      }
-      
-      atualizarCarrinho();
-      limparBuscaNome();
-      document.getElementById('busca').focus();
-    }
-
-    function atualizarCarrinho() {
-      const ul = document.getElementById('carrinho');
-      ul.innerHTML = '';
-      let total = 0;
-
-      carrinho.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <span>${item.quantidade}x ${item.nome} - <strong>R$ ${(item.preco * item.quantidade).toFixed(2)}</strong></span>
-          <button onclick="removerItem(${index})">Remover</button>
-        `;
-        ul.appendChild(li);
-        total += item.preco * item.quantidade;
+    const contadorProdutos = {};
+    vendas.forEach(venda => {
+      venda.itens.forEach(item => {
+        const nome = item.nome;
+        contadorProdutos[nome] = (contadorProdutos[nome] || 0) + item.quantidade;
       });
-
-      document.getElementById('total').textContent = `Total: R$ ${total.toFixed(2)}`;
-    }
-
-    function removerItem(index) {
-      carrinho.splice(index, 1);
-      atualizarCarrinho();
-    }
-
-    function limparCarrinho() {
-      carrinho = [];
-      atualizarCarrinho();
-    }
-
-    // --- FUNÇÕES DE VENDA E EXPORTAÇÃO ---
-    function enviarLista() {
-      if (carrinho.length === 0) {
-        alert("O carrinho está vazio!");
-        return;
-      }
-      let texto = "Olá! Segue minha lista de compras:\n\n";
-      carrinho.forEach(item => {
-        texto += `• ${item.quantidade}x ${item.nome} - R$ ${item.preco.toFixed(2)}\n`;
-      });
-      const total = carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0);
-      texto += `\n*Total: R$ ${total.toFixed(2)}*`;
-      
-      const url = `https://wa.me/5566996455672?text=${encodeURIComponent(texto)}`; // Substitua pelo seu número
-      window.open(url, '_blank');
-    }
-
-    function salvarVenda() {
-      if (carrinho.length === 0) {
-        alert("O carrinho está vazio!");
-        return;
-      }
-      document.getElementById('popupPagamento').style.display = 'flex';
-    }
-
-    function finalizarVenda(formaPagamento) {
-      const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-      vendas.push({
-        data: new Date().toLocaleString('pt-BR'),
-        itens: carrinho.slice(),
-        total: carrinho.reduce((s, i) => s + (i.preco * i.quantidade), 0),
-        pagamento: formaPagamento
-      });
-      localStorage.setItem('vendas', JSON.stringify(vendas));
-      alert(`Venda registrada com pagamento em ${formaPagamento}!`);
-      document.getElementById('popupPagamento').style.display = 'none';
-      limparCarrinho();
-    }
-
-    // --- FUNÇÕES DO POPUP DE VENDAS ---
-    function verVendas() {
-      const popup = document.getElementById('popupVendas');
-      const vendas = JSON.parse(localStorage.getItem('vendas') || '[]');
-      const el = document.getElementById('vendasTexto');
-      if (vendas.length === 0) {
-        el.textContent = "Nenhuma venda registrada.";
-      } else {
-        let texto = "";
-        vendas.forEach((v, i) => {
-          texto += `--- Venda ${i + 1} ---\nData: ${v.data}\nPagamento: ${v.pagamento}\n\n`;
-          v.itens.forEach(it => {
-            texto += `• ${it.quantidade}x ${it.nome} - R$ ${it.preco.toFixed(2)}\n`;
-          });
-          texto += `\nTotal: R$ ${v.total.toFixed(2)}\n\n`;
-        });
-        el.textContent = texto;
-      }
-      popup.style.display = 'flex';
-    }
-
-    function fecharPopup() {
-      document.getElementById('popupVendas').style.display = 'none';
-      document.getElementById('popupPagamento').style.display = 'none';
-    }
-
-    function limparVendas() {
-      if (confirm("Tem certeza que deseja apagar o histórico de todas as vendas?")) {
-        localStorage.removeItem('vendas');
-        document.getElementById('vendasTexto').textContent = "Nenhuma venda registrada.";
-        alert("Histórico de vendas apagado.");
-      }
-    }
-
-    function baixarVendas() {
-      const texto = document.getElementById('vendasTexto').textContent;
-      if (!texto || texto.includes("Nenhuma venda")) {
-        alert("Não há vendas para salvar.");
-        return;
-      }
-      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
-      const link = document.createElement("a");
-      const data = new Date().toISOString().split("T")[0];
-      link.download = `relatorio_vendas_${data}.txt`;
-      link.href = URL.createObjectURL(blob);
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    // --- ATALHOS DE TECLADO ---
-    document.addEventListener("keydown", function(e) {
-      const popupPagamento = document.getElementById("popupPagamento");
-      if (popupPagamento.style.display === "flex") {
-        e.preventDefault();
-        switch(e.key) {
-          case "1": finalizarVenda("Dinheiro"); break;
-          case "2": finalizarVenda("Pix"); break;
-          case "3": finalizarVenda("Crédito"); break;
-          case "4": finalizarVenda("Débito"); break;
-          case "Escape": fecharPopup(); break;
-        }
-        return;
-      }
-
-      // Atalho F2 para focar na busca por nome
-      if (e.key === "F2") {
-        e.preventDefault();
-        limparBuscaNome();
-        document.getElementById("busca").focus();
-      }
-      
-      // Atalho F3 para focar na busca por código
-      if (e.key === "F3") {
-        e.preventDefault();
-        limparBuscaCodigo();
-        document.getElementById("buscaCodigo").focus();
-      }
-
-      // Atalho Enter no campo de quantidade
-      if (e.key === 'Enter' && document.activeElement.id === 'quantidade') {
-          const addButton = document.activeElement.nextElementSibling;
-          if (addButton && addButton.tagName === 'BUTTON') {
-              addButton.click();
-          }
-      }
     });
-  </script>
+
+    const maisVendido = Object.entries(contadorProdutos).sort((a, b) => b[1] - a[1])[0]?.[0] || 'Nenhum';
+    const ultimoProduto = ultimaVenda.itens[ultimaVenda.itens.length - 1]?.nome || 'Nenhum';
+
+    const marquee = document.getElementById("marquee-info");
+    marquee.textContent = `Última venda: ${hora} | Total de vendas: ${totalDia} | Produto mais vendido: ${maisVendido} | Último produto vendido: ${ultimoProduto}`;
+  }
+
+  document.addEventListener('DOMContentLoaded', atualizarMarqueeInfo);
+</script>
 </body>
 </html>
